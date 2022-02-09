@@ -119,13 +119,23 @@ export const TouchMui = (props: any): JSX.Element => {
             sx={{width: tableWidth + 'px'}}
           >
             <TableRow>
-              <TableCell
-                colSpan={2}
-                align='center'
-                sx={{color: 'white', backgroundColor: viridisColors[obj]}}
-              >
-                Finger {obj}
-              </TableCell>
+              {obj === 9 ? (
+                <TableCell
+                  colSpan={2}
+                  align='center'
+                  sx={{color: 'black', backgroundColor: viridisColors[obj]}}
+                >
+                  Finger {obj}
+                </TableCell>
+              ) : (
+                <TableCell
+                  colSpan={2}
+                  align='center'
+                  sx={{color: 'white', backgroundColor: viridisColors[obj]}}
+                >
+                  Finger {obj}
+                </TableCell>
+              )}
             </TableRow>
             {positionDataEntries.map((dataEntry, index) => (
               <TableRow>
@@ -140,13 +150,23 @@ export const TouchMui = (props: any): JSX.Element => {
             sx={{width: tableWidth + 'px'}}
           >
             <TableRow>
-              <TableCell
-                colSpan={2}
-                align='center'
-                sx={{color: 'white', backgroundColor: viridisColors[obj]}}
-              >
-                Finger {obj}
-              </TableCell>
+              {obj === 9? (
+                <TableCell
+                  colSpan={2}
+                  align='center'
+                  sx={{color: 'black', backgroundColor: viridisColors[obj]}}
+                >
+                  Finger {obj}
+                </TableCell>
+              ) : (
+                <TableCell
+                  colSpan={2}
+                  align='center'
+                  sx={{color: 'white', backgroundColor: viridisColors[obj]}}
+                >
+                  Finger {obj}
+                </TableCell>
+              )}
             </TableRow>
             {traceDataEntries.map((dataEntry, index) => (
               <TableRow>
