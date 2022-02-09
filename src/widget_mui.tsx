@@ -26,7 +26,7 @@ import webdsTheme from './webdsTheme';
 const plotHeight = 500;
 
 const tableSpace = 2;
-const tableWidth = 150;
+const tableWidth = 160;
 const tableHeight = 240;
 
 const viewTypes = [

@@ -38,21 +38,29 @@ let eventError = false;
 const computeLinearity = (index: number, length : number): number => {
   const xSum = xTrace[index].reduce((a, b) => a + b, 0);
   const xSumSquared = xSum * xSum;
+  const xMean = xSum / length;
   const xSquared = xTrace[index].map(e => e * e);
   const xSquaredSum = xSquared.reduce((a, b) => a + b, 0);
-  const sX = xSquaredSum - (xSumSquared / length);
 
   const ySum = yTrace[index].reduce((a, b) => a + b, 0);
-  const ySumSquared = ySum * ySum;
-  const ySquared = yTrace[index].map(e => e * e);
-  const ySquaredSum = ySquared.reduce((a, b) => a + b, 0);
-  const sY = ySquaredSum - (ySumSquared / length);
+  const yMean = ySum / length;
 
   const xySum = xTrace[index].reduce((a, b, i) => a + b * yTrace[index][i], 0);
-  const sXY = xySum - (xSum * ySum / length);
 
-  let linearity = sXY / (Math.sqrt(sX) * Math.sqrt(sY));
-  linearity = Math.abs(Math.round(linearity * 1e2) / 1e2);
+  /* Coefficients for equation of line best fit (Ax + By + C = 0) */
+  const A = (xySum - (xSum * ySum / length)) / (xSquaredSum - (xSumSquared / length));
+  const B = -1;
+  const C = yMean - A * xMean;
+
+  let linearity = 0;
+  const denominator = Math.sqrt(A * A + B * B);
+
+  for (let i = 0; i < length; i++) {
+    const distance = Math.abs(A * xTrace[index][i] + B * yTrace[index][i] + C) / denominator;
+    linearity = distance > linearity ? distance : linearity;
+  }
+
+  linearity = Math.round(linearity * 1e1) / 1e1;
 
   return linearity;
 };
