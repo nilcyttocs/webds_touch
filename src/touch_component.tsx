@@ -239,6 +239,9 @@ const TouchPlot = (props: any): JSX.Element => {
         textfont: {family: 'Arial', color: 'white', size: 18},
         name: 'Object ' + i
       };
+      if (i >= 5) {
+        marker.textfont.color = 'black';
+      }
       markers.push(marker);
     }
 

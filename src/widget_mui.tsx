@@ -119,7 +119,7 @@ export const TouchMui = (props: any): JSX.Element => {
             sx={{width: tableWidth + 'px'}}
           >
             <TableRow>
-              {obj === 9 ? (
+              {obj >= 5 ? (
                 <TableCell
                   colSpan={2}
                   align='center'
@@ -150,7 +150,7 @@ export const TouchMui = (props: any): JSX.Element => {
             sx={{width: tableWidth + 'px'}}
           >
             <TableRow>
-              {obj === 9? (
+              {obj >= 5? (
                 <TableCell
                   colSpan={2}
                   align='center'
