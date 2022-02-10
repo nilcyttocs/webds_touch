@@ -54,7 +54,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
       }
     });
 
-    launcher.add({command, args: {isLauncher: true}, category: 'WebDS'});
+    launcher.add({command, args: {isLauncher: true}, category: 'WebDS - Exploration'});
 
     let tracker = new WidgetTracker<MainAreaWidget>({namespace: 'webds_touch'});
     restorer.restore(tracker, {command, name: () => 'webds_touch'});
