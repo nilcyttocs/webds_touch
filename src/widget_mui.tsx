@@ -5,6 +5,7 @@ import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import Select from '@mui/material/Select';
 import Divider from '@mui/material/Divider';
+import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import Snackbar from '@mui/material/Snackbar';
 import FormControl from '@mui/material/FormControl';
@@ -63,6 +64,8 @@ const viridisColors = [
 
 const snackMessage = 'Failed to retrieve touch reports. \
   Please ensure config JSON file available in packrat cache.';
+
+const linearityTooltip = 'max error to line of best fit in x/y axis units';
 
 export const TouchMui = (props: any): JSX.Element => {
   const [run, setRun] = useState<boolean>(false);
@@ -170,7 +173,13 @@ export const TouchMui = (props: any): JSX.Element => {
             </TableRow>
             {traceDataEntries.map((dataEntry, index) => (
               <TableRow>
-                <TableCell>{dataEntry}</TableCell>
+                {dataEntry === 'linearity' && stats[obj][index] ? (
+                  <Tooltip title={linearityTooltip}>
+                    <TableCell>{dataEntry}</TableCell>
+                  </Tooltip>
+                ) : (
+                  <TableCell>{dataEntry}</TableCell>
+                )}
                 <TableCell align='right'>{stats[obj][index]}</TableCell>
               </TableRow>
             ))}
