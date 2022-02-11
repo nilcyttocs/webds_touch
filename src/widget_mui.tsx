@@ -63,7 +63,8 @@ const viridisColors = [
 ];
 
 const snackMessage = 'Failed to retrieve touch reports. \
-  Please ensure config JSON file available in packrat cache.';
+  Please check in file browser in left sidebar and ensure private config JSON file placed in Packrat directory \
+  (e.g. /Packrat/1234567/config_private.json for PR1234567).';
 
 const linearityTooltip = 'max error to line of best fit in x/y axis units';
 
