@@ -30,6 +30,8 @@ const tableSpace = 2;
 const tableWidth = 160;
 const tableHeight = 240;
 
+const dividerWidth = 80 + 8 + 180 + 56 + 40;
+
 const viewTypes = [
   'Position Data',
   'Trace Data'
@@ -229,13 +231,13 @@ export const TouchMui = (props: any): JSX.Element => {
       <div>
         <Stack
           spacing={5}
-          divider={<Divider orientation='horizontal' sx={{width: '364px'}}/>}
+          divider={<Divider orientation='horizontal' sx={{width: dividerWidth + 'px'}}/>}
           sx={{marginLeft: '50px', marginTop: '50px'}}
         >
           <div>
             <div style={{height: '50px'}}>
               {showInfo ? (
-                <div style={{width: plotWidth + 'px',fontSize: '20px', textAlign: 'center'}}>
+                <div style={{width: plotWidth + 'px', fontSize: '20px', textAlign: 'center'}}>
                   {viewType}
                 </div>
               ) : (
