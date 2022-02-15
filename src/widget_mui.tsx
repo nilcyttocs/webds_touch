@@ -314,7 +314,14 @@ export const TouchMui = (props: any): JSX.Element => {
               </FormControl>
             </Stack>
               {viewType === '' ? (
-                null
+                <Fab
+                  color='primary'
+                  size='small'
+                  disabled
+                  onClick={() => {setRun(true);}}
+                >
+                  <PlayArrowIcon/>
+                </Fab>
               ) : (
                 viewType === 'Position Data' ? (
                   run === false ? (
