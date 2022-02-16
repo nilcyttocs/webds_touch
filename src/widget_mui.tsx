@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import Fab from '@mui/material/Fab';
 import Paper from '@mui/material/Paper';
@@ -24,13 +24,13 @@ import TouchPlot from './touch_component';
 
 import webdsTheme from './webdsTheme';
 
-const plotHeight = 500;
+const PLOT_HEIGHT = 500;
 
-const tableSpace = 2;
-const tableWidth = 160;
-const tableHeight = 240;
+const TABLE_SPACE = 2;
+const TABLE_WIDTH = 160;
+const TABLE_HEIGHT = 240;
 
-const dividerWidth = 80 + 8 + 180 + 56 + 40;
+const SELECT_WIDTH = 200;
 
 const viewTypes = [
   'Position Data',
@@ -77,11 +77,12 @@ export const TouchMui = (props: any): JSX.Element => {
   const [clearPlot, setClearPlot] = useState<boolean>(false);
   const [stats, setStats] = useState<number[][]>([...Array(10)].map(e => Array(5)));
   const [snack, setSnack] = useState<boolean>(false);
+  const [inputWidth, setInputWidth] = useState<number>(0);
 
-  let plotWidth = Math.floor(plotHeight * props.maxX / props.maxY);
-  plotWidth += tableWidth * 5;
+  let plotWidth = Math.floor(PLOT_HEIGHT * props.maxX / props.maxY);
+  plotWidth += TABLE_WIDTH * 5;
   plotWidth += 5 * 8;
-  plotWidth += tableSpace * 4 * 8;
+  plotWidth += TABLE_SPACE * 4 * 8;
 
   const resetViewType = () => {
     setViewType('');
@@ -117,12 +118,12 @@ export const TouchMui = (props: any): JSX.Element => {
     return (
       <TableContainer
         component={Paper}
-        sx={{width: tableWidth + 'px', height: tableHeight + 'px'}}
+        sx={{width: TABLE_WIDTH + 'px', height: TABLE_HEIGHT + 'px'}}
       >
         {viewType === 'Position Data' ? (
           <Table
             size='small'
-            sx={{width: tableWidth + 'px'}}
+            sx={{width: TABLE_WIDTH + 'px'}}
           >
             <TableRow>
               {obj >= 5 ? (
@@ -153,7 +154,7 @@ export const TouchMui = (props: any): JSX.Element => {
         ) : (
           <Table
             size='small'
-            sx={{width: tableWidth + 'px'}}
+            sx={{width: TABLE_WIDTH + 'px'}}
           >
             <TableRow>
               {obj >= 5? (
@@ -201,7 +202,7 @@ export const TouchMui = (props: any): JSX.Element => {
 
     return (
       <Stack
-        spacing={tableSpace}
+        spacing={TABLE_SPACE}
         direction='row'
       >
         {row}
@@ -218,7 +219,7 @@ export const TouchMui = (props: any): JSX.Element => {
 
     return (
       <Stack
-        spacing={tableSpace}
+        spacing={TABLE_SPACE}
         direction='row'
       >
         {row}
@@ -226,18 +227,26 @@ export const TouchMui = (props: any): JSX.Element => {
     );
   };
 
+  useEffect(() => {
+    let text = document.getElementById('viewTypeText');
+    if (text) {
+      text.style.fontSize = '18px';
+      setInputWidth(text.clientWidth + 8 + SELECT_WIDTH + 80 + 40);
+    }
+  }, []);
+
   return (
     <ThemeProvider theme={webdsTheme}>
       <div>
         <Stack
           spacing={5}
-          divider={<Divider orientation='horizontal' sx={{width: dividerWidth + 'px'}}/>}
+          divider={<Divider orientation='horizontal' sx={{width: inputWidth + 'px'}}/>}
           sx={{marginLeft: '50px', marginTop: '50px'}}
         >
           <div>
             <div style={{height: '50px'}}>
               {showInfo ? (
-                <div style={{width: plotWidth + 'px', fontSize: '20px', textAlign: 'center'}}>
+                <div style={{width: plotWidth + 'px', fontSize: '20px', textAlign: 'center', whiteSpace: 'nowrap'}}>
                   {viewType}
                 </div>
               ) : (
@@ -253,8 +262,9 @@ export const TouchMui = (props: any): JSX.Element => {
                 maxX={props.maxX}
                 maxY={props.maxY}
                 viewType={viewType}
-                plotHeight={plotHeight}
                 clearPlot={clearPlot}
+                plotHeight={PLOT_HEIGHT}
+                inputWidth={inputWidth}
                 resetViewType={resetViewType}
                 updateShowInfo={updateShowInfo}
                 updateStats={updateStats}
@@ -262,7 +272,7 @@ export const TouchMui = (props: any): JSX.Element => {
               />
               {showInfo ? (
                 <Stack
-                  spacing={tableSpace}
+                  spacing={TABLE_SPACE}
                 >
                   {generateTopRow()}
                   {generateBottomRow()}
@@ -273,7 +283,7 @@ export const TouchMui = (props: any): JSX.Element => {
             </Stack>
           </div>
           <Stack
-            spacing={7}
+            spacing={10}
             direction='row'
             sx={{height: '70px'}}
           >
@@ -281,12 +291,12 @@ export const TouchMui = (props: any): JSX.Element => {
               spacing={1}
               direction='row'
             >
-              <div style={{paddingTop: '8px', fontSize: '18px'}}>
+              <div id='viewTypeText' style={{paddingTop: '8px', fontSize: '18px', whiteSpace: 'nowrap'}}>
                 View Type
               </div>
               <FormControl
                 size='small'
-                sx={{minWidth: '180px', maxWidth: '180px'}}>
+                sx={{minWidth: SELECT_WIDTH + 'px', maxWidth: SELECT_WIDTH + 'px'}}>
                 <Select
                   displayEmpty
                   value={viewType}

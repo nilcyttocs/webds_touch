@@ -424,7 +424,7 @@ const TouchPlot = (props: any): JSX.Element => {
           onUpdate={(figure) => storeState(figure)}
         />
       ) : (
-        <div style={{paddingLeft: '50px', fontSize: '18px'}}>
+        <div style={{width: (props.inputWidth) + 'px', fontSize: '18px', textAlign: 'center', whiteSpace: 'nowrap'}}>
           Please select view type
         </div>
       )}
