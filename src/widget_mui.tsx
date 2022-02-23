@@ -22,7 +22,7 @@ import RestartAltIcon from '@mui/icons-material/RestartAlt';
 
 import TouchPlot from './touch_component';
 
-import webdsTheme from './webdsTheme';
+import webdsTheme from './webds_theme';
 
 const PLOT_HEIGHT = 500;
 
@@ -325,8 +325,6 @@ export const TouchMui = (props: any): JSX.Element => {
             </Stack>
               {viewType === '' ? (
                 <Fab
-                  color='primary'
-                  size='small'
                   disabled
                   onClick={() => {setRun(true);}}
                 >
@@ -336,16 +334,12 @@ export const TouchMui = (props: any): JSX.Element => {
                 viewType === 'Position Data' ? (
                   run === false ? (
                     <Fab
-                      size='small'
-                      color='primary'
                       onClick={() => {setRun(true);}}
                     >
                       <PlayArrowIcon/>
                     </Fab>
                   ) : (
                     <Fab
-                      size='small'
-                      color='primary'
                       onClick={() => {setRun(false);}}
                     >
                       <StopIcon/>
@@ -353,8 +347,6 @@ export const TouchMui = (props: any): JSX.Element => {
                   )
                 ) : (
                   <Fab
-                    size='small'
-                    color='primary'
                     onClick={() => {triggerClearPlot();}}
                   >
                     <RestartAltIcon/>
