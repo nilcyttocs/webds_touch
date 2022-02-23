@@ -175,7 +175,10 @@ const setReport = async (disable: number[], enable: number[]): Promise<void> => 
 };
 
 const TouchPlot = (props: any): JSX.Element => {
-  const [show, setShow] = useState<boolean>(false);
+  const [showPlot, setShowPlot] = useState<boolean>(false);
+  const [showMessage, setShowMessage] = useState<boolean>(false);
+
+
   const [data, setData] = useState<any>([]);
   const [config, setConfig] = useState<any>({});
   const [layout, setLayout] = useState<any>({});
@@ -301,7 +304,7 @@ const TouchPlot = (props: any): JSX.Element => {
 
     props.updateStats(stats);
 
-    setShow(true);
+    setShowPlot(true);
     props.updateShowInfo(true);
   };
 
@@ -358,10 +361,12 @@ const TouchPlot = (props: any): JSX.Element => {
     viewType = props.viewType;
     stopAnimation();
     if (!viewType) {
-      setShow(false);
+      setShowMessage(true);
+      setShowPlot(false);
       props.updateShowInfo(false);
       return;
     }
+    setShowMessage(false);
     setConfig(plotConfig);
     setLayout(
       {
@@ -414,7 +419,7 @@ const TouchPlot = (props: any): JSX.Element => {
 
   return (
     <div style={{height: height + 'px', display: 'flex', alignItems: 'center'}}>
-      {show ? (
+      {showPlot ? (
         <Plot
           data={data}
           layout={layout}
@@ -424,9 +429,13 @@ const TouchPlot = (props: any): JSX.Element => {
           onUpdate={(figure) => storeState(figure)}
         />
       ) : (
-        <div style={{width: (props.inputWidth) + 'px', fontSize: '18px', textAlign: 'center', whiteSpace: 'nowrap'}}>
-          Please select view type
-        </div>
+        showMessage ? (
+          <div style={{width: (props.inputWidth) + 'px', fontSize: '18px', textAlign: 'center', whiteSpace: 'nowrap'}}>
+            Please select view type
+          </div>
+        ) : (
+          null
+        )
       )}
     </div>
   );

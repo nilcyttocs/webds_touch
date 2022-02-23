@@ -71,8 +71,8 @@ const snackMessage = 'Failed to retrieve touch reports. \
 const linearityTooltip = 'max error to line of best fit in x/y axis units';
 
 export const TouchMui = (props: any): JSX.Element => {
-  const [run, setRun] = useState<boolean>(false);
-  const [viewType, setViewType] = useState<string>('');
+  const [run, setRun] = useState<boolean>(true);
+  const [viewType, setViewType] = useState<string>('Position Data');
   const [showInfo, setShowInfo] = useState<boolean>(false);
   const [clearPlot, setClearPlot] = useState<boolean>(false);
   const [stats, setStats] = useState<number[][]>([...Array(10)].map(e => Array(5)));
