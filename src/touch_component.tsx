@@ -156,22 +156,19 @@ const addEvent = () => {
   eventSource.addEventListener('error', errorHandler, false);
 };
 
-const setReport = async (disable: number[], enable: number[]): Promise<void> => {
-  let status = false;
+const setReport = async (disable: number[], enable: number[]) => {
   removeEvent();
   const dataToSend = {enable, disable, fps: FPS};
-  await requestAPI<any>('report', {
-    body: JSON.stringify(dataToSend),
-    method: 'POST'
-  }).then(() => {
+  try {
+    await requestAPI<any>('report', {
+      body: JSON.stringify(dataToSend),
+      method: 'POST'
+    });
     addEvent();
-    status = true;
-  }).catch(reason => {
-    console.error(
-      `Error on POST /webds/report\n${reason}`
-    );
-  });
-  return status ? Promise.resolve() : Promise.reject();
+  } catch (error) {
+    console.error(`Error - POST /webds/report\n${error}`);
+    throw 'Failed to set report enable/disable';
+  }
 };
 
 const TouchPlot = (props: any): JSX.Element => {
@@ -357,7 +354,7 @@ const TouchPlot = (props: any): JSX.Element => {
     requestID = requestAnimationFrame(animatePlot);
   };
 
-  const newPlot = async () => {
+  const newPlot = () => {
     viewType = props.viewType;
     stopAnimation();
     if (!viewType) {
@@ -391,8 +388,9 @@ const TouchPlot = (props: any): JSX.Element => {
     );
     clearPlot();
     try {
-      await setReport([REPORT_DELTA, REPORT_RAW], [REPORT_TOUCH]);
-    } catch {
+      setReport([REPORT_DELTA, REPORT_RAW], [REPORT_TOUCH]);
+    } catch (error) {
+      console.error(error);
       props.resetViewType();
       return;
     }

@@ -11,16 +11,14 @@ const TouchContainer = (props: any): JSX.Element => {
   const [dimensions, setDimensions] = useState<any>([]);
 
   const getDeviceInfo = async () => {
-    await requestAPI<any>('command?query=app-info')
-    .then(data => {
+    try {
+      const data = await requestAPI<any>('command?query=app-info');
       if (data.maxX && data.maxY) {
         setDimensions([data.maxX, data.maxY]);
       }
-    }).catch(reason => {
-      console.error(
-        `Error on GET /webds/command?query=app-info\n${reason}`
-      );
-    });
+    } catch (error) {
+      console.error(`Error - GET /webds/command?query=app-info\n${error}`);
+    }
   };
 
   useEffect(() => {
