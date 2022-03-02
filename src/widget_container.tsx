@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react';
 
 import CircularProgress from '@mui/material/CircularProgress';
 
+import { WebDSService } from '@webds/service';
+
 import { TouchMui } from './widget_mui';
 
 import { requestAPI } from './handler';
@@ -10,7 +12,12 @@ import { requestAPI } from './handler';
 const TouchContainer = (props: any): JSX.Element => {
   const [dimensions, setDimensions] = useState<any>([]);
 
-  const getDeviceInfo = async () => {
+  const initialize = async () => {
+    try{
+      await props.service.packrat.cache.addPrivateConfig();
+    } catch (error) {
+      console.error(error);
+    }
     try {
       const data = await requestAPI<any>('command?query=app-info');
       if (data.maxX && data.maxY) {
@@ -22,7 +29,7 @@ const TouchContainer = (props: any): JSX.Element => {
   };
 
   useEffect(() => {
-    getDeviceInfo();
+    initialize();
   }, []);
 
   return (
@@ -39,10 +46,17 @@ const TouchContainer = (props: any): JSX.Element => {
 };
 
 export class TouchWidget extends ReactWidget {
+  service: WebDSService|null = null;
+
+  constructor(service: WebDSService) {
+    super();
+    this.service = service;
+  }
+
   render(): JSX.Element {
     return (
       <div className='jp-webdsTouch-container'>
-        <TouchContainer/>
+        <TouchContainer service={this.service}/>
       </div>
     );
   }
