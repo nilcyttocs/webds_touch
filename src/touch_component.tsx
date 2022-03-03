@@ -146,10 +146,14 @@ const removeEvent = () => {
   if (eventSource && eventSource.readyState != SSE_CLOSED) {
     eventSource.removeEventListener('report', eventHandler, false);
     eventSource.close();
+    eventSource = undefined;
   }
 };
 
 const addEvent = () => {
+  if (eventSource) {
+    return;
+  }
   eventError = false;
   eventSource = new window.EventSource('/webds/report');
   eventSource.addEventListener('report', eventHandler, false);
@@ -157,7 +161,6 @@ const addEvent = () => {
 };
 
 const setReport = async (disable: number[], enable: number[]) => {
-  removeEvent();
   const dataToSend = {enable, disable, fps: FPS};
   try {
     await requestAPI<any>('report', {
@@ -398,12 +401,15 @@ const TouchPlot = (props: any): JSX.Element => {
   };
 
   useEffect(() => {
+    return () => {stopPlot();}
+  }, []);
+
+  useEffect(() => {
     run = props.run;
   }, [props.run]);
 
   useEffect(() => {
     newPlot();
-    return () => {stopPlot();}
   }, [props.viewType]);
 
   const isFirstRun = useRef(true);
