@@ -131,7 +131,6 @@ const errorHandler = (error: any) => {
 const eventHandler = (event: any) => {
   const data = JSON.parse(event.data);
   if (!data || !data.report || data.report[0] !== 'position') {
-    eventData = undefined;
     return;
   }
 
