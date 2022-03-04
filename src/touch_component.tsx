@@ -212,11 +212,6 @@ const TouchPlot = (props: any): JSX.Element => {
     }
   };
 
-  const stopPlot = () => {
-    stopAnimation();
-    removeEvent();
-  };
-
   const computePlot = () => {
     if (eventData === undefined) {
       pos = undefined;
@@ -358,7 +353,6 @@ const TouchPlot = (props: any): JSX.Element => {
 
   const newPlot = () => {
     viewType = props.viewType;
-    stopAnimation();
     if (!viewType) {
       setShowMessage(true);
       setShowPlot(false);
@@ -400,7 +394,7 @@ const TouchPlot = (props: any): JSX.Element => {
   };
 
   useEffect(() => {
-    return () => {stopPlot();}
+    return () => {removeEvent();}
   }, []);
 
   useEffect(() => {
@@ -409,6 +403,7 @@ const TouchPlot = (props: any): JSX.Element => {
 
   useEffect(() => {
     newPlot();
+    return () => {stopAnimation();}
   }, [props.viewType]);
 
   const isFirstRun = useRef(true);
