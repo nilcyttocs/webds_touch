@@ -183,6 +183,9 @@ const TouchPlot = (props: any): JSX.Element => {
   const [layout, setLayout] = useState<any>({});
   const [frames, setFrames] = useState<any>([]);
 
+  const plot_bgcolor = 'black';
+  const paper_bgcolor = 'rgba(0, 0, 0, 0)';
+
   const l = 0;
   const r = 0;
   const t = 0;
@@ -366,19 +369,22 @@ const TouchPlot = (props: any): JSX.Element => {
         width,
         height,
         margin: {l, r, t, b},
+        plot_bgcolor,
+        paper_bgcolor,
         xaxis: {
           range: [0, props.maxX],
-          mirror: false,
-          showline: false,
+          mirror: true,
+          showline: true,
+          linecolor: '#A9A9A9',
           showticklabels: false
         },
         yaxis: {
           range: [0, props.maxY],
-          mirror: false,
-          showline: false,
+          mirror: true,
+          showline: true,
+          linecolor: '#A9A9A9',
           showticklabels: false
         },
-        plot_bgcolor: 'black',
         showlegend: false
       }
     );
