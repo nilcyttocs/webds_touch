@@ -241,7 +241,7 @@ export const TouchMui = (props: any): JSX.Element => {
         <Stack
           spacing={5}
           divider={<Divider orientation='horizontal' sx={{width: inputWidth + 'px'}}/>}
-          sx={{marginLeft: '50px', marginTop: '50px'}}
+          sx={{marginLeft: '24px', marginTop: '20px'}}
         >
           <div>
             <div style={{height: '50px'}}>
