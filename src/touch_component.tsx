@@ -10,7 +10,10 @@ const REPORT_TOUCH = 17;
 const REPORT_DELTA = 18;
 const REPORT_RAW = 19;
 
-const FPS = 120;
+const REPORT_FPS = 120;
+
+const RENDER_FPS = 60;
+const RENDER_INTERVAL = 1000 / RENDER_FPS;
 
 const viridisColors = [
   '#440154',
@@ -160,7 +163,7 @@ const addEvent = () => {
 };
 
 const setReport = async (disable: number[], enable: number[]) => {
-  const dataToSend = {enable, disable, fps: FPS};
+  const dataToSend = {enable, disable, fps: REPORT_FPS};
   try {
     await requestAPI<any>('report', {
       body: JSON.stringify(dataToSend),
@@ -198,6 +201,7 @@ const TouchPlot = (props: any): JSX.Element => {
   let pos: any;
   let t0: number;
   let t1: number;
+  let tThen: number;
   let frameCount: number;
   let requestID: number|undefined;
 
@@ -321,15 +325,24 @@ const TouchPlot = (props: any): JSX.Element => {
       return;
     }
 
+    requestID = requestAnimationFrame(animatePlot);
+
     if (!run) {
-      requestID = requestAnimationFrame(animatePlot);
       return;
     }
+
+    const tNow = window.performance.now();
+    const elapsed = tNow - tThen;
+
+    if (elapsed <= RENDER_INTERVAL) {
+      return;
+    }
+
+    tThen = tNow - (elapsed % RENDER_INTERVAL);
 
     computePlot();
 
     if (pos === undefined) {
-      requestID = requestAnimationFrame(animatePlot);
       return;
     }
 
@@ -337,21 +350,19 @@ const TouchPlot = (props: any): JSX.Element => {
 
     frameCount++;
     t1 = Date.now();
-    if (t1 - t0 >= 3000) {
+    if (t1 - t0 >= 1000) {
       t0 = t1;
-      const fps = Math.floor(frameCount / 3);
-      console.log(`Touch FPS = ${fps}`);
+      console.log(`Touch FPS = ${frameCount}`);
       frameCount = 0;
     }
-
-    requestID = requestAnimationFrame(animatePlot);
   };
 
   const startAnimation = () => {
     t0 = Date.now();
     frameCount = 0;
     eventData = undefined;
-    requestID = requestAnimationFrame(animatePlot);
+    tThen = window.performance.now();
+    animatePlot();
   };
 
   const newPlot = () => {
