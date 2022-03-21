@@ -32,10 +32,12 @@ const TouchContainer = (props: any): JSX.Element => {
     initialize();
   }, []);
 
+  const webdsTheme = props.service.ui.getWebDSTheme();
+
   return (
-    <div>
+    <div className='jp-webds-widget-body'>
       {dimensions.length ? (
-        <TouchMui maxX={dimensions[0]} maxY={dimensions[1]}/>
+        <TouchMui maxX={dimensions[0]} maxY={dimensions[1]} theme={webdsTheme}/>
       ) : (
         <div style={{marginLeft: 200, marginTop: 200}}>
           <CircularProgress color='primary'/>
@@ -55,7 +57,7 @@ export class TouchWidget extends ReactWidget {
 
   render(): JSX.Element {
     return (
-      <div className='jp-webdsTouch-container'>
+      <div className='jp-webds-widget'>
         <TouchContainer service={this.service}/>
       </div>
     );

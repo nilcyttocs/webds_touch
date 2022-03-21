@@ -8,6 +8,7 @@ import Divider from '@mui/material/Divider';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import Snackbar from '@mui/material/Snackbar';
+import Typography from '@mui/material/Typography';
 import FormControl from '@mui/material/FormControl';
 import { ThemeProvider } from '@mui/material/styles';
 
@@ -21,8 +22,6 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 
 import TouchPlot from './touch_component';
-
-import webdsTheme from './webds_theme';
 
 const PLOT_HEIGHT = 500;
 
@@ -230,25 +229,26 @@ export const TouchMui = (props: any): JSX.Element => {
   useEffect(() => {
     let text = document.getElementById('viewTypeText');
     if (text) {
-      text.style.fontSize = '18px';
       setInputWidth(text.clientWidth + 8 + SELECT_WIDTH + 80 + 40);
     }
   }, []);
 
   return (
-    <ThemeProvider theme={webdsTheme}>
+    <ThemeProvider theme={props.theme}>
       <div>
         <Stack
           spacing={5}
           divider={<Divider orientation='horizontal' sx={{width: inputWidth + 'px'}}/>}
-          sx={{marginLeft: '24px', marginTop: '20px'}}
         >
           <div>
             <div style={{height: '50px'}}>
               {showInfo ? (
-                <div style={{width: plotWidth + 'px', fontSize: '20px', textAlign: 'center', whiteSpace: 'nowrap'}}>
+                <Typography
+                  variant='h5'
+                  sx={{width: plotWidth + 'px', textAlign: 'center'}}
+                >
                   {viewType}
-                </div>
+                </Typography>
               ) : (
                 null
               )}
@@ -285,15 +285,18 @@ export const TouchMui = (props: any): JSX.Element => {
           <Stack
             spacing={10}
             direction='row'
-            sx={{height: '70px'}}
+            sx={{width: inputWidth + 'px', height: '70px'}}
           >
             <Stack
               spacing={1}
               direction='row'
             >
-              <div id='viewTypeText' style={{paddingTop: '8px', fontSize: '18px', whiteSpace: 'nowrap'}}>
+              <Typography
+                id='viewTypeText'
+                sx={{paddingTop: '10px'}}
+              >
                 View Type
-              </div>
+              </Typography>
               <FormControl
                 size='small'
                 sx={{minWidth: SELECT_WIDTH + 'px', maxWidth: SELECT_WIDTH + 'px'}}>
@@ -323,36 +326,36 @@ export const TouchMui = (props: any): JSX.Element => {
                 </Select>
               </FormControl>
             </Stack>
-              {viewType === '' ? (
-                <Fab
-                  disabled
-                  onClick={() => {setRun(true);}}
-                >
-                  <PlayArrowIcon/>
-                </Fab>
-              ) : (
-                viewType === 'Position Data' ? (
-                  run === false ? (
-                    <Fab
-                      onClick={() => {setRun(true);}}
-                    >
-                      <PlayArrowIcon/>
-                    </Fab>
-                  ) : (
-                    <Fab
-                      onClick={() => {setRun(false);}}
-                    >
-                      <StopIcon/>
-                    </Fab>
-                  )
+            {viewType === '' ? (
+              <Fab
+                disabled
+                onClick={() => {setRun(true);}}
+              >
+                <PlayArrowIcon/>
+              </Fab>
+            ) : (
+              viewType === 'Position Data' ? (
+                run === false ? (
+                  <Fab
+                    onClick={() => {setRun(true);}}
+                  >
+                    <PlayArrowIcon/>
+                  </Fab>
                 ) : (
                   <Fab
-                    onClick={() => {triggerClearPlot();}}
+                    onClick={() => {setRun(false);}}
                   >
-                    <RestartAltIcon/>
+                    <StopIcon/>
                   </Fab>
                 )
-              )}
+              ) : (
+                <Fab
+                  onClick={() => {triggerClearPlot();}}
+                >
+                  <RestartAltIcon/>
+                </Fab>
+              )
+            )}
           </Stack>
         </Stack>
         <Snackbar

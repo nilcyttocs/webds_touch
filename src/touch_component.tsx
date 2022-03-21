@@ -1,5 +1,7 @@
 import React, { useState, useEffect , useRef} from 'react';
 
+import Typography from '@mui/material/Typography';
+
 import Plot from 'react-plotly.js';
 
 import { requestAPI } from './handler';
@@ -188,11 +190,12 @@ const TouchPlot = (props: any): JSX.Element => {
 
   const plot_bgcolor = 'black';
   const paper_bgcolor = 'rgba(0, 0, 0, 0)';
+  const axis_linecolor = 'rgba(128, 128, 128, 0.5)';
 
-  const l = 0;
-  const r = 0;
-  const t = 0;
-  const b = 0;
+  const l = 2;
+  const r = 2;
+  const t = 2;
+  const b = 2;
   const height = props.plotHeight;
   const width = Math.floor(height * props.maxX / props.maxY);
 
@@ -386,14 +389,14 @@ const TouchPlot = (props: any): JSX.Element => {
           range: [0, props.maxX],
           mirror: true,
           showline: true,
-          linecolor: '#A9A9A9',
+          linecolor: axis_linecolor,
           showticklabels: false
         },
         yaxis: {
           range: [0, props.maxY],
           mirror: true,
           showline: true,
-          linecolor: '#A9A9A9',
+          linecolor: axis_linecolor,
           showticklabels: false
         },
         showlegend: false
@@ -445,9 +448,11 @@ const TouchPlot = (props: any): JSX.Element => {
         />
       ) : (
         showMessage ? (
-          <div style={{width: (props.inputWidth) + 'px', fontSize: '18px', textAlign: 'center', whiteSpace: 'nowrap'}}>
+          <Typography
+            sx={{width: props.inputWidth + 'px', textAlign: 'center'}}
+          >
             Please select view type
-          </div>
+          </Typography>
         ) : (
           null
         )
