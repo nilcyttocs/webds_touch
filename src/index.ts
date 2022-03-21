@@ -38,7 +38,6 @@ const plugin: JupyterFrontEndPlugin<void> = {
       },
       execute: () => {
         if (!widget || widget.isDisposed) {
-          service.greeting();
           const content = new TouchWidget(service);
           widget = new MainAreaWidget<TouchWidget>({content});
           widget.id = 'webds_touch_widget';
