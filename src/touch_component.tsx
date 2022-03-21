@@ -128,6 +128,7 @@ const captureTraces = () => {
 
 const errorHandler = (error: any) => {
   eventError = true;
+  removeEvent();
   console.error(
     `Error on GET /webds/report\n${error}`
   );
@@ -164,7 +165,7 @@ const addEvent = () => {
   eventSource.addEventListener('error', errorHandler, false);
 };
 
-const setReport = async (disable: number[], enable: number[]) => {
+const setReport = async (disable: number[], enable: number[]): Promise<void> => {
   const dataToSend = {enable, disable, fps: REPORT_FPS};
   try {
     await requestAPI<any>('report', {
@@ -174,8 +175,9 @@ const setReport = async (disable: number[], enable: number[]) => {
     addEvent();
   } catch (error) {
     console.error('Error - POST /webds/report');
-    throw error;
+    return Promise.reject('Failed to enable/disable report types');
   }
+  return Promise.resolve();
 };
 
 const TouchPlot = (props: any): JSX.Element => {
@@ -368,7 +370,7 @@ const TouchPlot = (props: any): JSX.Element => {
     animatePlot();
   };
 
-  const newPlot = () => {
+  const newPlot = async () => {
     viewType = props.viewType;
     if (!viewType) {
       setShowMessage(true);
@@ -404,7 +406,7 @@ const TouchPlot = (props: any): JSX.Element => {
     );
     clearPlot();
     try {
-      setReport([REPORT_DELTA, REPORT_RAW], [REPORT_TOUCH]);
+      await setReport([REPORT_DELTA, REPORT_RAW], [REPORT_TOUCH]);
     } catch (error) {
       console.error(error);
       props.resetViewType();
