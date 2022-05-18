@@ -58,7 +58,6 @@ const TouchContainer = (props: any): JSX.Element => {
   return (
     <div className="jp-webds-widget-body">
       <ThemeProvider theme={webdsTheme}>
-        {" "}
         {initialized ? (
           <TouchMui maxX={dimensions[0]} maxY={dimensions[1]} />
         ) : (
