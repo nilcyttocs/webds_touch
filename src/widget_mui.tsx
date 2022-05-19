@@ -22,7 +22,7 @@ import RestartAltIcon from "@mui/icons-material/RestartAlt";
 
 import TouchPlot from "./touch_component";
 
-const PLOT_HEIGHT = 500;
+const PLOT_LENGTH = 500;
 
 const TABLE_SPACE = 2;
 const TABLE_WIDTH = 160;
@@ -61,10 +61,18 @@ export const TouchMui = (props: any): JSX.Element => {
   );
   const [inputWidth, setInputWidth] = useState<number>(0);
 
-  let plotWidth = Math.floor((PLOT_HEIGHT * props.maxX) / props.maxY);
-  plotWidth += TABLE_WIDTH * 5;
-  plotWidth += 5 * 8;
-  plotWidth += TABLE_SPACE * 4 * 8;
+  let plotHeight = PLOT_LENGTH;
+  let plotWidth = Math.floor((PLOT_LENGTH * props.maxX) / props.maxY);
+
+  if (plotWidth > plotHeight) {
+    plotWidth = PLOT_LENGTH;
+    plotHeight = Math.floor((PLOT_LENGTH * props.maxY) / props.maxX);
+  }
+
+  let totalWidth = plotWidth;
+  totalWidth += TABLE_WIDTH * 5;
+  totalWidth += 5 * 8;
+  totalWidth += TABLE_SPACE * 4 * 8;
 
   const resetViewType = () => {
     setViewType("");
@@ -218,25 +226,27 @@ export const TouchMui = (props: any): JSX.Element => {
             {showInfo ? (
               <Typography
                 variant="h5"
-                sx={{ width: plotWidth + "px", textAlign: "center" }}
+                sx={{ width: totalWidth + "px", textAlign: "center" }}
               >
                 {viewType}
               </Typography>
             ) : null}
           </div>
           <Stack spacing={5} direction="row">
-            <TouchPlot
-              run={run}
-              maxX={props.maxX}
-              maxY={props.maxY}
-              viewType={viewType}
-              clearPlot={clearPlot}
-              plotHeight={PLOT_HEIGHT}
-              inputWidth={inputWidth}
-              resetViewType={resetViewType}
-              updateShowInfo={updateShowInfo}
-              updateStats={updateStats}
-            />
+            <div style={{ width: plotWidth }}>
+              <TouchPlot
+                run={run}
+                maxX={props.maxX}
+                maxY={props.maxY}
+                viewType={viewType}
+                clearPlot={clearPlot}
+                plotHeight={plotHeight}
+                inputWidth={inputWidth}
+                resetViewType={resetViewType}
+                updateShowInfo={updateShowInfo}
+                updateStats={updateStats}
+              />
+            </div>
             {showInfo ? (
               <Stack spacing={TABLE_SPACE}>
                 {generateTopRow()}
