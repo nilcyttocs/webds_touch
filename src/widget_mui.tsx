@@ -13,6 +13,7 @@ import FormControl from "@mui/material/FormControl";
 import Table from "@mui/material/Table";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
+import TableBody from "@mui/material/TableBody";
 import TableContainer from "@mui/material/TableContainer";
 
 import StopIcon from "@mui/icons-material/Stop";
@@ -94,70 +95,75 @@ export const TouchMui = (props: any): JSX.Element => {
   const generateTable = (obj: number): JSX.Element => {
     return (
       <TableContainer
+        key={obj}
         component={Paper}
         sx={{ width: TABLE_WIDTH + "px", height: TABLE_HEIGHT + "px" }}
       >
         {viewType === "Position Data" ? (
           <Table size="small" sx={{ width: TABLE_WIDTH + "px" }}>
-            <TableRow>
-              {obj >= 5 ? (
-                <TableCell
-                  colSpan={2}
-                  align="center"
-                  sx={{ color: "black", backgroundColor: viridisColors[obj] }}
-                >
-                  Finger {obj}
-                </TableCell>
-              ) : (
-                <TableCell
-                  colSpan={2}
-                  align="center"
-                  sx={{ color: "white", backgroundColor: viridisColors[obj] }}
-                >
-                  Finger {obj}
-                </TableCell>
-              )}
-            </TableRow>
-            {positionDataEntries.map((dataEntry, index) => (
+            <TableBody>
               <TableRow>
-                <TableCell>{dataEntry}</TableCell>
-                <TableCell align="right">{stats[obj][index]}</TableCell>
+                {obj >= 5 ? (
+                  <TableCell
+                    colSpan={2}
+                    align="center"
+                    sx={{ color: "black", backgroundColor: viridisColors[obj] }}
+                  >
+                    Finger {obj}
+                  </TableCell>
+                ) : (
+                  <TableCell
+                    colSpan={2}
+                    align="center"
+                    sx={{ color: "white", backgroundColor: viridisColors[obj] }}
+                  >
+                    Finger {obj}
+                  </TableCell>
+                )}
               </TableRow>
-            ))}
+              {positionDataEntries.map((dataEntry, index) => (
+                <TableRow key={index}>
+                  <TableCell>{dataEntry}</TableCell>
+                  <TableCell align="right">{stats[obj][index]}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
           </Table>
         ) : (
           <Table size="small" sx={{ width: TABLE_WIDTH + "px" }}>
-            <TableRow>
-              {obj >= 5 ? (
-                <TableCell
-                  colSpan={2}
-                  align="center"
-                  sx={{ color: "black", backgroundColor: viridisColors[obj] }}
-                >
-                  Finger {obj}
-                </TableCell>
-              ) : (
-                <TableCell
-                  colSpan={2}
-                  align="center"
-                  sx={{ color: "white", backgroundColor: viridisColors[obj] }}
-                >
-                  Finger {obj}
-                </TableCell>
-              )}
-            </TableRow>
-            {traceDataEntries.map((dataEntry, index) => (
+            <TableBody>
               <TableRow>
-                {dataEntry === "linearity" && stats[obj][index] ? (
-                  <Tooltip title={linearityTooltip}>
-                    <TableCell>{dataEntry}</TableCell>
-                  </Tooltip>
+                {obj >= 5 ? (
+                  <TableCell
+                    colSpan={2}
+                    align="center"
+                    sx={{ color: "black", backgroundColor: viridisColors[obj] }}
+                  >
+                    Finger {obj}
+                  </TableCell>
                 ) : (
-                  <TableCell>{dataEntry}</TableCell>
+                  <TableCell
+                    colSpan={2}
+                    align="center"
+                    sx={{ color: "white", backgroundColor: viridisColors[obj] }}
+                  >
+                    Finger {obj}
+                  </TableCell>
                 )}
-                <TableCell align="right">{stats[obj][index]}</TableCell>
               </TableRow>
-            ))}
+              {traceDataEntries.map((dataEntry, index) => (
+                <TableRow key={index}>
+                  {dataEntry === "linearity" && stats[obj][index] ? (
+                    <Tooltip title={linearityTooltip}>
+                      <TableCell>{dataEntry}</TableCell>
+                    </Tooltip>
+                  ) : (
+                    <TableCell>{dataEntry}</TableCell>
+                  )}
+                  <TableCell align="right">{stats[obj][index]}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
           </Table>
         )}
       </TableContainer>
@@ -270,8 +276,8 @@ export const TouchMui = (props: any): JSX.Element => {
                   return selected;
                 }}
               >
-                {viewTypes.map((viewType) => (
-                  <MenuItem key={viewType} value={viewType}>
+                {viewTypes.map((viewType, index) => (
+                  <MenuItem key={index} value={viewType}>
                     {viewType}
                   </MenuItem>
                 ))}
