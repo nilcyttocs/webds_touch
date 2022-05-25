@@ -20,7 +20,17 @@ import StopIcon from "@mui/icons-material/Stop";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 
+import ToggleButton from "@mui/material/ToggleButton";
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+
+import Checkbox from "@mui/material/Checkbox";
+import FormControlLabel from "@mui/material/FormControlLabel";
+
 import TouchPlot from "./touch_component";
+
+type Lengths = {
+  [length: string]: number;
+};
 
 const PLOT_LENGTH = 500;
 
@@ -28,6 +38,7 @@ const TABLE_SPACE = 2;
 const TABLE_WIDTH = 160;
 const TABLE_HEIGHT = 240;
 
+const INPUT_WIDTH = 800;
 const SELECT_WIDTH = 200;
 
 const viewTypes = ["Position Data", "Trace Data"];
@@ -35,6 +46,8 @@ const viewTypes = ["Position Data", "Trace Data"];
 const positionDataEntries = ["x", "y", "z", "wx", "wy"];
 
 const traceDataEntries = ["range x", "range y", "linearity"];
+
+const rotationAngles = [0, 90, 180, 270];
 
 const viridisColors = [
   "#440154",
@@ -52,27 +65,90 @@ const viridisColors = [
 const linearityTooltip = "max error to line of best fit in x/y axis units";
 
 export const TouchMui = (props: any): JSX.Element => {
+  const [initialized, setInitialized] = useState<boolean>(false);
   const [run, setRun] = useState<boolean>(true);
+  const [lengths, setLengths] = useState<Lengths>({});
+  const [xFlip, setXFlip] = useState<string>("");
+  const [yFlip, setYFlip] = useState<string>("");
+  const [rotation, setRotation] = useState<string>("");
+  const [angle, setAngle] = useState<number>(0);
   const [viewType, setViewType] = useState<string>("Position Data");
-  const [showInfo, setShowInfo] = useState<boolean>(false);
+  const [showPlot, setShowPlot] = useState<boolean>(true);
   const [clearPlot, setClearPlot] = useState<boolean>(false);
   const [stats, setStats] = useState<number[][]>(
     [...Array(10)].map((e) => Array(5))
   );
-  const [inputWidth, setInputWidth] = useState<number>(0);
 
-  let plotHeight = PLOT_LENGTH;
-  let plotWidth = Math.floor((PLOT_LENGTH * props.maxX) / props.maxY);
+  const handleAngleToggle = (
+    event: React.MouseEvent<HTMLElement>,
+    angle: number
+  ) => {
+    switch (angle) {
+      case 0:
+        setRotation(`rotate(${angle}deg) translate(0px, 0px)`);
+        setLengths((prev) => ({
+          ...prev,
+          plotWidth: prev.plotXLength,
+          totalWidth:
+            prev.plotXLength + TABLE_WIDTH * 5 + 5 * 8 + TABLE_SPACE * 4 * 8
+        }));
+        break;
+      case 90:
+        setRotation(
+          `rotate(${angle}deg) translate(0px, ${-lengths.plotYLength}px)`
+        );
+        setLengths((prev) => ({
+          ...prev,
+          plotWidth: prev.plotYLength,
+          totalWidth:
+            prev.plotYLength + TABLE_WIDTH * 5 + 5 * 8 + TABLE_SPACE * 4 * 8
+        }));
+        break;
+      case 180:
+        setRotation(
+          `rotate(${angle}deg) translate(${-lengths.plotXLength}px, ${-lengths.plotYLength}px)`
+        );
+        setLengths((prev) => ({
+          ...prev,
+          plotWidth: prev.plotXLength,
+          totalWidth:
+            prev.plotXLength + TABLE_WIDTH * 5 + 5 * 8 + TABLE_SPACE * 4 * 8
+        }));
+        break;
+      case 270:
+        setRotation(
+          `rotate(${angle}deg) translate(${-lengths.plotXLength}px, 0px)`
+        );
+        setLengths((prev) => ({
+          ...prev,
+          plotWidth: prev.plotYLength,
+          totalWidth:
+            prev.plotYLength + TABLE_WIDTH * 5 + 5 * 8 + TABLE_SPACE * 4 * 8
+        }));
+        break;
+      default:
+        break;
+    }
+    setAngle(angle);
+  };
 
-  if (plotWidth > plotHeight) {
-    plotWidth = PLOT_LENGTH;
-    plotHeight = Math.floor((PLOT_LENGTH * props.maxY) / props.maxX);
-  }
-
-  let totalWidth = plotWidth;
-  totalWidth += TABLE_WIDTH * 5;
-  totalWidth += 5 * 8;
-  totalWidth += TABLE_SPACE * 4 * 8;
+  const handleFlipCheckboxClick = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    if (event.target.checked) {
+      if (event.target.id === "xFlip") {
+        setXFlip("rotateX(180deg)");
+      } else if (event.target.id === "yFlip") {
+        setYFlip("rotateY(180deg)");
+      }
+    } else {
+      if (event.target.id === "xFlip") {
+        setXFlip("");
+      } else if (event.target.id === "yFlip") {
+        setYFlip("");
+      }
+    }
+  };
 
   const resetViewType = () => {
     setViewType("");
@@ -88,8 +164,8 @@ export const TouchMui = (props: any): JSX.Element => {
     }
   };
 
-  const updateShowInfo = (show: boolean) => {
-    setShowInfo(show);
+  const updateShowPlot = (show: boolean) => {
+    setShowPlot(show);
   };
 
   const triggerClearPlot = () => {
@@ -98,6 +174,16 @@ export const TouchMui = (props: any): JSX.Element => {
 
   const updateStats = (stats: number[][]) => {
     setStats(stats);
+  };
+
+  const generateToggleButtons = (): JSX.Element[] => {
+    return rotationAngles.map((angle, index) => {
+      return (
+        <ToggleButton key={index} value={angle} sx={{ width: "50px" }}>
+          <Typography variant="button">{angle}</Typography>
+        </ToggleButton>
+      );
+    });
   };
 
   const generateTable = (obj: number): JSX.Element => {
@@ -207,131 +293,234 @@ export const TouchMui = (props: any): JSX.Element => {
   };
 
   useEffect(() => {
-    let text = document.getElementById("viewTypeText");
-    if (text) {
-      setInputWidth(text.clientWidth + 8 + SELECT_WIDTH + 80 + 40);
+    let height = PLOT_LENGTH;
+    let width = Math.floor((PLOT_LENGTH * props.maxX) / props.maxY);
+    if (width > height) {
+      width = PLOT_LENGTH;
+      height = Math.floor((PLOT_LENGTH * props.maxY) / props.maxX);
     }
-  }, []);
+    let total = width;
+    total += TABLE_WIDTH * 5;
+    total += 5 * 8;
+    total += TABLE_SPACE * 4 * 8;
+    setLengths({
+      plotXLength: width,
+      plotYLength: height,
+      plotWidth: width,
+      totalWidth: total
+    });
+    setRotation("rotate(0deg) translate(0px, 0px)");
+    setInitialized(true);
+  }, [props.maxX, props.maxY]);
 
   return (
     <>
-      <Stack
-        spacing={5}
-        divider={
-          <Divider orientation="horizontal" sx={{ width: inputWidth + "px" }} />
-        }
-      >
-        <div>
-          <div style={{ height: "50px" }}>
-            {showInfo ? (
-              <Typography
-                variant="h5"
-                sx={{ width: totalWidth + "px", textAlign: "center" }}
-              >
-                {viewType}
-              </Typography>
-            ) : null}
-          </div>
-          <Stack spacing={5} direction="row">
-            <div style={{ width: plotWidth }}>
-              <TouchPlot
-                run={run}
-                maxX={props.maxX}
-                maxY={props.maxY}
-                viewType={viewType}
-                clearPlot={clearPlot}
-                plotHeight={plotHeight}
-                inputWidth={inputWidth}
-                resetViewType={resetViewType}
-                updateShowInfo={updateShowInfo}
-                updateStats={updateStats}
-              />
-            </div>
-            {showInfo ? (
-              <Stack spacing={TABLE_SPACE}>
-                {generateTopRow()}
-                {generateBottomRow()}
-              </Stack>
-            ) : null}
-          </Stack>
-        </div>
+      {initialized ? (
         <Stack
-          spacing={10}
-          direction="row"
-          sx={{ width: inputWidth + "px", height: "70px" }}
+          spacing={5}
+          divider={
+            <Divider
+              orientation="horizontal"
+              sx={{ width: INPUT_WIDTH + "px" }}
+            />
+          }
         >
-          <Stack spacing={1} direction="row">
-            <Typography id="viewTypeText" sx={{ paddingTop: "10px" }}>
-              View Type
-            </Typography>
-            <FormControl
-              size="small"
-              sx={{
-                minWidth: SELECT_WIDTH + "px",
-                maxWidth: SELECT_WIDTH + "px"
-              }}
-            >
-              <Select
-                displayEmpty
-                value={viewType}
-                onChange={changeViewType}
-                renderValue={(selected: any) => {
-                  if (selected.length === 0) {
-                    return (
-                      <div style={{ color: "grey" }}>
-                        <em>Please Select</em>
+          {showPlot ? (
+            <div>
+              <div style={{ height: "50px" }}>
+                <Typography
+                  variant="h5"
+                  sx={{
+                    width: lengths.totalWidth + "px",
+                    textAlign: "center"
+                  }}
+                >
+                  {viewType}
+                </Typography>
+              </div>
+              <div style={{ height: PLOT_LENGTH + "px" }}>
+                <Stack spacing={5} direction="row">
+                  <div
+                    style={{
+                      transform: rotation,
+                      transformOrigin: "top left",
+                      minWidth: lengths.plotWidth,
+                      maxWidth: lengths.plotWidth
+                    }}
+                  >
+                    <div
+                      style={{
+                        transform: xFlip,
+                        transformOrigin: "center",
+                        width: lengths.plotXLength,
+                        height: lengths.plotYLength
+                      }}
+                    >
+                      <div
+                        style={{
+                          transform: yFlip,
+                          transformOrigin: "center",
+                          width: lengths.plotXLength,
+                          height: lengths.plotYLength
+                        }}
+                      >
+                        <TouchPlot
+                          run={run}
+                          maxX={props.maxX}
+                          maxY={props.maxY}
+                          viewType={viewType}
+                          clearPlot={clearPlot}
+                          plotWidth={lengths.plotXLength}
+                          plotHeight={lengths.plotYLength}
+                          inputWidth={INPUT_WIDTH}
+                          resetViewType={resetViewType}
+                          updateShowPlot={updateShowPlot}
+                          updateStats={updateStats}
+                        />
                       </div>
-                    );
-                  }
-                  return selected;
-                }}
-              >
-                {viewTypes.map((viewType, index) => (
-                  <MenuItem key={index} value={viewType}>
-                    {viewType}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Stack>
-          {viewType === "" ? (
-            <Fab
-              disabled
-              onClick={() => {
-                setRun(true);
-              }}
-            >
-              <PlayArrowIcon />
-            </Fab>
-          ) : viewType === "Position Data" ? (
-            run === false ? (
-              <Fab
-                onClick={() => {
-                  setRun(true);
-                }}
-              >
-                <PlayArrowIcon />
-              </Fab>
-            ) : (
-              <Fab
-                onClick={() => {
-                  setRun(false);
-                }}
-              >
-                <StopIcon />
-              </Fab>
-            )
+                    </div>
+                  </div>
+                  <Stack spacing={TABLE_SPACE}>
+                    {generateTopRow()}
+                    {generateBottomRow()}
+                  </Stack>
+                </Stack>
+              </div>
+            </div>
           ) : (
-            <Fab
-              onClick={() => {
-                triggerClearPlot();
+            <div
+              style={{
+                width: INPUT_WIDTH + "px",
+                height: 50 + PLOT_LENGTH + "px",
+                display: "flex",
+                alignItems: "center"
               }}
             >
-              <RestartAltIcon />
-            </Fab>
+              <Typography
+                sx={{
+                  width: "100%",
+                  textAlign: "center"
+                }}
+              >
+                Please select view type
+              </Typography>
+            </div>
           )}
+          <div
+            style={{
+              width: INPUT_WIDTH + "px",
+              display: "flex",
+              justifyContent: "space-between"
+            }}
+          >
+            <Stack spacing={5} direction="row">
+              <Stack spacing={1} direction="row">
+                <Typography sx={{ paddingTop: "10px" }}>View Type</Typography>
+                <FormControl
+                  size="small"
+                  sx={{
+                    minWidth: SELECT_WIDTH + "px",
+                    maxWidth: SELECT_WIDTH + "px"
+                  }}
+                >
+                  <Select
+                    displayEmpty
+                    value={viewType}
+                    onChange={changeViewType}
+                    renderValue={(selected: any) => {
+                      if (selected.length === 0) {
+                        return (
+                          <div style={{ color: "grey" }}>
+                            <em>Please Select</em>
+                          </div>
+                        );
+                      }
+                      return selected;
+                    }}
+                  >
+                    {viewTypes.map((viewType, index) => (
+                      <MenuItem key={index} value={viewType}>
+                        {viewType}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Stack>
+              {viewType === "" ? (
+                <Fab
+                  disabled
+                  onClick={() => {
+                    setRun(true);
+                  }}
+                >
+                  <PlayArrowIcon />
+                </Fab>
+              ) : viewType === "Position Data" ? (
+                run === false ? (
+                  <Fab
+                    onClick={() => {
+                      setRun(true);
+                    }}
+                  >
+                    <PlayArrowIcon />
+                  </Fab>
+                ) : (
+                  <Fab
+                    onClick={() => {
+                      setRun(false);
+                    }}
+                  >
+                    <StopIcon />
+                  </Fab>
+                )
+              ) : (
+                <Fab
+                  onClick={() => {
+                    triggerClearPlot();
+                  }}
+                >
+                  <RestartAltIcon />
+                </Fab>
+              )}
+            </Stack>
+            <Stack spacing={1}>
+              <Stack spacing={1} direction="row">
+                <Typography sx={{ paddingTop: "10px" }}>
+                  Plot Rotation
+                </Typography>
+                <ToggleButtonGroup
+                  value={angle}
+                  exclusive
+                  onChange={handleAngleToggle}
+                  sx={{ height: "40px" }}
+                >
+                  {generateToggleButtons()}
+                </ToggleButtonGroup>
+              </Stack>
+              <Stack spacing={1} direction="row">
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      id="xFlip"
+                      onChange={(event) => handleFlipCheckboxClick(event)}
+                    />
+                  }
+                  label="X-Axis Flip"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      id="yFlip"
+                      onChange={(event) => handleFlipCheckboxClick(event)}
+                    />
+                  }
+                  label="Y-Axis Flip"
+                />
+              </Stack>
+            </Stack>
+          </div>
         </Stack>
-      </Stack>
+      ) : null}
     </>
   );
 };

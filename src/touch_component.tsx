@@ -1,7 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 
-import Typography from "@mui/material/Typography";
-
 import Plot from "react-plotly.js";
 
 import { requestAPI } from "./handler";
@@ -140,12 +138,6 @@ const captureTraces = () => {
   }
 };
 
-const errorHandler = (error: any) => {
-  eventError = true;
-  removeEvent();
-  console.error(`Error on GET /webds/report\n${error}`);
-};
-
 const eventHandler = (event: any) => {
   const data = JSON.parse(event.data);
   if (!data || !data.report || data.report[0] !== "position") {
@@ -160,11 +152,17 @@ const eventHandler = (event: any) => {
 };
 
 const removeEvent = () => {
-  if (eventSource && eventSource.readyState != SSE_CLOSED) {
+  if (eventSource && eventSource.readyState !== SSE_CLOSED) {
     eventSource.removeEventListener("report", eventHandler, false);
     eventSource.close();
     eventSource = undefined;
   }
+};
+
+const errorHandler = (error: any) => {
+  eventError = true;
+  removeEvent();
+  console.error(`Error on GET /webds/report\n${error}`);
 };
 
 const addEvent = () => {
@@ -197,8 +195,6 @@ const setReport = async (
 
 const TouchPlot = (props: any): JSX.Element => {
   const [showPlot, setShowPlot] = useState<boolean>(false);
-  const [showMessage, setShowMessage] = useState<boolean>(false);
-
   const [data, setData] = useState<any>([]);
   const [config, setConfig] = useState<any>({});
   const [layout, setLayout] = useState<any>({});
@@ -212,8 +208,8 @@ const TouchPlot = (props: any): JSX.Element => {
   const r = 2;
   const t = 2;
   const b = 2;
+  const width = props.plotWidth;
   const height = props.plotHeight;
-  const width = Math.floor((height * props.maxX) / props.maxY);
 
   const plotConfig = { displayModeBar: false };
 
@@ -325,7 +321,7 @@ const TouchPlot = (props: any): JSX.Element => {
     props.updateStats(stats);
 
     setShowPlot(true);
-    props.updateShowInfo(true);
+    props.updateShowPlot(true);
   };
 
   const clearPlot = () => {
@@ -386,12 +382,10 @@ const TouchPlot = (props: any): JSX.Element => {
   const newPlot = async () => {
     viewType = props.viewType;
     if (!viewType) {
-      setShowMessage(true);
       setShowPlot(false);
-      props.updateShowInfo(false);
+      props.updateShowPlot(false);
       return;
     }
-    setShowMessage(false);
     setConfig(plotConfig);
     setLayout({
       width,
@@ -465,12 +459,6 @@ const TouchPlot = (props: any): JSX.Element => {
           onInitialized={(figure) => storeState(figure)}
           onUpdate={(figure) => storeState(figure)}
         />
-      ) : showMessage ? (
-        <Typography
-          sx={{ width: props.inputWidth + "px", textAlign: "center" }}
-        >
-          Please select view type
-        </Typography>
       ) : null}
     </div>
   );
