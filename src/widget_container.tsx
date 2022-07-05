@@ -35,13 +35,19 @@ const TouchContainer = (props: any): JSX.Element => {
       setAlert(true);
       return;
     }
+    const dataToSend: any = {
+      command: "getAppInfo"
+    };
     try {
-      const data = await requestAPI<any>("command?query=app-info");
-      if (data.maxX && data.maxY) {
-        setDimensions([data.maxX, data.maxY]);
+      const response = await requestAPI<any>("command", {
+        body: JSON.stringify(dataToSend),
+        method: "POST"
+      });
+      if (response.maxX && response.maxY) {
+        setDimensions([response.maxX, response.maxY]);
       }
     } catch (error) {
-      console.error(`Error - GET /webds/command?query=app-info\n${error}`);
+      console.error(`Error - POST /webds/command\n${dataToSend}\n${error}`);
       alertMessage = alertMessageAppInfo;
       setAlert(true);
       return;
