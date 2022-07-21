@@ -14,6 +14,15 @@ import { touchIcon } from "./icons";
 
 import { TouchWidget } from "./widget_container";
 
+namespace Attributes {
+  export const command = "webds_touch:open";
+  export const id = "webds_touch_widget";
+  export const label = "Touch Data";
+  export const caption = "Touch Data";
+  export const category = "Touch - Assessment";
+  export const rank = 20;
+}
+
 /**
  * Initialization data for the @webds/touch extension.
  */
@@ -31,10 +40,10 @@ const plugin: JupyterFrontEndPlugin<void> = {
 
     let widget: WebDSWidget;
     const { commands, shell } = app;
-    const command: string = "webds_touch:open";
+    const command = Attributes.command;
     commands.addCommand(command, {
-      label: "Touch Data",
-      caption: "Touch Data",
+      label: Attributes.label,
+      caption: Attributes.caption,
       icon: (args: { [x: string]: any }) => {
         return args["isLauncher"] ? touchIcon : undefined;
       },
@@ -42,8 +51,8 @@ const plugin: JupyterFrontEndPlugin<void> = {
         if (!widget || widget.isDisposed) {
           const content = new TouchWidget(service);
           widget = new WebDSWidget<TouchWidget>({ content });
-          widget.id = "webds_touch_widget";
-          widget.title.label = "Touch Data";
+          widget.id = Attributes.id;
+          widget.title.label = Attributes.label;
           widget.title.icon = touchIcon;
           widget.title.closable = true;
         }
@@ -59,13 +68,14 @@ const plugin: JupyterFrontEndPlugin<void> = {
     launcher.add({
       command,
       args: { isLauncher: true },
-      category: "WebDS - Exploration"
+      category: Attributes.category,
+      rank: Attributes.rank
     });
 
     let tracker = new WidgetTracker<WebDSWidget>({
-      namespace: "webds_touch"
+      namespace: Attributes.id
     });
-    restorer.restore(tracker, { command, name: () => "webds_touch" });
+    restorer.restore(tracker, { command, name: () => Attributes.id });
   }
 };
 
