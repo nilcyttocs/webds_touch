@@ -321,7 +321,6 @@ const TouchPlot = (props: any): JSX.Element => {
     props.updateStats(stats);
 
     setShowPlot(true);
-    props.updateShowPlot(true);
   };
 
   const clearPlot = () => {

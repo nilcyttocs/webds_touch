@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 
+import Box from "@mui/material/Box";
 import Fab from "@mui/material/Fab";
 import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
+import Button from "@mui/material/Button";
 import Select from "@mui/material/Select";
-import Divider from "@mui/material/Divider";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import Typography from "@mui/material/Typography";
@@ -32,7 +33,9 @@ type Lengths = {
   [length: string]: number;
 };
 
-const PLOT_LENGTH = 500;
+const HEIGHT_TITLE = 70;
+const HEIGHT_CONTENT = 500;
+const HEIGHT_CONTROLS = 120;
 
 const TABLE_SPACE = 2;
 const TABLE_WIDTH = 160;
@@ -40,6 +43,8 @@ const TABLE_HEIGHT = 240;
 
 const INPUT_WIDTH = 800;
 const SELECT_WIDTH = 200;
+
+const showHelp = false;
 
 const viewTypes = ["Position Data", "Trace Data"];
 
@@ -64,7 +69,7 @@ const viridisColors = [
 
 const linearityTooltip = "max error to line of best fit in x/y axis units";
 
-export const TouchMui = (props: any): JSX.Element => {
+export const Landing = (props: any): JSX.Element => {
   const [initialized, setInitialized] = useState<boolean>(false);
   const [run, setRun] = useState<boolean>(true);
   const [lengths, setLengths] = useState<Lengths>({});
@@ -90,7 +95,11 @@ export const TouchMui = (props: any): JSX.Element => {
           ...prev,
           plotWidth: prev.plotXLength,
           totalWidth:
-            prev.plotXLength + TABLE_WIDTH * 5 + 5 * 8 + TABLE_SPACE * 4 * 8
+            prev.plotXLength +
+            TABLE_WIDTH * 5 +
+            5 * 8 +
+            TABLE_SPACE * 4 * 8 +
+            24 * 2
         }));
         break;
       case 90:
@@ -101,7 +110,11 @@ export const TouchMui = (props: any): JSX.Element => {
           ...prev,
           plotWidth: prev.plotYLength,
           totalWidth:
-            prev.plotYLength + TABLE_WIDTH * 5 + 5 * 8 + TABLE_SPACE * 4 * 8
+            prev.plotYLength +
+            TABLE_WIDTH * 5 +
+            5 * 8 +
+            TABLE_SPACE * 4 * 8 +
+            24 * 2
         }));
         break;
       case 180:
@@ -112,7 +125,11 @@ export const TouchMui = (props: any): JSX.Element => {
           ...prev,
           plotWidth: prev.plotXLength,
           totalWidth:
-            prev.plotXLength + TABLE_WIDTH * 5 + 5 * 8 + TABLE_SPACE * 4 * 8
+            prev.plotXLength +
+            TABLE_WIDTH * 5 +
+            5 * 8 +
+            TABLE_SPACE * 4 * 8 +
+            24 * 2
         }));
         break;
       case 270:
@@ -123,7 +140,11 @@ export const TouchMui = (props: any): JSX.Element => {
           ...prev,
           plotWidth: prev.plotYLength,
           totalWidth:
-            prev.plotYLength + TABLE_WIDTH * 5 + 5 * 8 + TABLE_SPACE * 4 * 8
+            prev.plotYLength +
+            TABLE_WIDTH * 5 +
+            5 * 8 +
+            TABLE_SPACE * 4 * 8 +
+            24 * 2
         }));
         break;
       default:
@@ -159,6 +180,7 @@ export const TouchMui = (props: any): JSX.Element => {
     if (viewType !== event.target.value) {
       setViewType(event.target.value);
       if (event.target.value) {
+        setShowPlot(true);
         setRun(true);
       }
     }
@@ -293,16 +315,17 @@ export const TouchMui = (props: any): JSX.Element => {
   };
 
   useEffect(() => {
-    let height = PLOT_LENGTH;
-    let width = Math.floor((PLOT_LENGTH * props.maxX) / props.maxY);
+    let height = HEIGHT_CONTENT;
+    let width = Math.floor((HEIGHT_CONTENT * props.maxX) / props.maxY);
     if (width > height) {
-      width = PLOT_LENGTH;
-      height = Math.floor((PLOT_LENGTH * props.maxY) / props.maxX);
+      width = HEIGHT_CONTENT;
+      height = Math.floor((HEIGHT_CONTENT * props.maxY) / props.maxX);
     }
     let total = width;
     total += TABLE_WIDTH * 5;
     total += 5 * 8;
     total += TABLE_SPACE * 4 * 8;
+    total += 24 * 2;
     setLengths({
       plotXLength: width,
       plotYLength: height,
@@ -316,209 +339,239 @@ export const TouchMui = (props: any): JSX.Element => {
   return (
     <>
       {initialized ? (
-        <Stack
-          spacing={5}
-          divider={
-            <Divider
-              orientation="horizontal"
-              sx={{ width: INPUT_WIDTH + "px" }}
-            />
-          }
-        >
-          {showPlot ? (
-            <div>
-              <div style={{ height: "50px" }}>
+        <Stack spacing={2}>
+          <Box
+            sx={{
+              width: lengths.totalWidth + "px",
+              height: HEIGHT_TITLE + "px",
+              position: "relative",
+              bgcolor: "section.main"
+            }}
+          >
+            <Typography
+              variant="h5"
+              sx={{
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)"
+              }}
+            >
+              {viewType === "" ? "Touch Data" : viewType}
+            </Typography>
+            {showHelp && (
+              <Button
+                variant="text"
+                sx={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "16px",
+                  transform: "translate(0%, -50%)"
+                }}
+              >
                 <Typography
-                  variant="h5"
-                  sx={{
-                    width: lengths.totalWidth + "px",
-                    textAlign: "center"
+                  variant="body2"
+                  sx={{ textDecoration: "underline" }}
+                >
+                  Help
+                </Typography>
+              </Button>
+            )}
+          </Box>
+          <Box
+            sx={{
+              width: lengths.totalWidth + "px",
+              height: HEIGHT_CONTENT + 24 * 2 + "px",
+              position: "relative",
+              bgcolor: "section.main",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center"
+            }}
+          >
+            {showPlot ? (
+              <Stack spacing={5} direction="row">
+                <div
+                  style={{
+                    transform: rotation,
+                    transformOrigin: "top left",
+                    minWidth: lengths.plotWidth,
+                    maxWidth: lengths.plotWidth
                   }}
                 >
-                  {viewType}
-                </Typography>
-              </div>
-              <div style={{ height: PLOT_LENGTH + "px" }}>
-                <Stack spacing={5} direction="row">
                   <div
                     style={{
-                      transform: rotation,
-                      transformOrigin: "top left",
-                      minWidth: lengths.plotWidth,
-                      maxWidth: lengths.plotWidth
+                      transform: xFlip,
+                      transformOrigin: "center",
+                      width: lengths.plotXLength,
+                      height: lengths.plotYLength
                     }}
                   >
                     <div
                       style={{
-                        transform: xFlip,
+                        transform: yFlip,
                         transformOrigin: "center",
                         width: lengths.plotXLength,
                         height: lengths.plotYLength
                       }}
                     >
-                      <div
-                        style={{
-                          transform: yFlip,
-                          transformOrigin: "center",
-                          width: lengths.plotXLength,
-                          height: lengths.plotYLength
-                        }}
-                      >
-                        <TouchPlot
-                          run={run}
-                          maxX={props.maxX}
-                          maxY={props.maxY}
-                          viewType={viewType}
-                          clearPlot={clearPlot}
-                          plotWidth={lengths.plotXLength}
-                          plotHeight={lengths.plotYLength}
-                          inputWidth={INPUT_WIDTH}
-                          resetViewType={resetViewType}
-                          updateShowPlot={updateShowPlot}
-                          updateStats={updateStats}
-                        />
-                      </div>
+                      <TouchPlot
+                        run={run}
+                        maxX={props.maxX}
+                        maxY={props.maxY}
+                        viewType={viewType}
+                        clearPlot={clearPlot}
+                        plotWidth={lengths.plotXLength}
+                        plotHeight={lengths.plotYLength}
+                        inputWidth={INPUT_WIDTH}
+                        resetViewType={resetViewType}
+                        updateShowPlot={updateShowPlot}
+                        updateStats={updateStats}
+                      />
                     </div>
                   </div>
-                  <Stack spacing={TABLE_SPACE}>
-                    {generateTopRow()}
-                    {generateBottomRow()}
-                  </Stack>
+                </div>
+                <Stack spacing={TABLE_SPACE}>
+                  {generateTopRow()}
+                  {generateBottomRow()}
                 </Stack>
-              </div>
-            </div>
-          ) : (
-            <div
-              style={{
-                width: INPUT_WIDTH + "px",
-                height: 50 + PLOT_LENGTH + "px",
-                display: "flex",
-                alignItems: "center"
-              }}
-            >
+              </Stack>
+            ) : (
               <Typography
                 sx={{
-                  width: "100%",
-                  textAlign: "center"
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)"
                 }}
               >
                 Please select view type
               </Typography>
-            </div>
-          )}
-          <div
-            style={{
-              width: INPUT_WIDTH + "px",
+            )}
+          </Box>
+          <Box
+            sx={{
+              width: lengths.totalWidth + "px",
+              minHeight: HEIGHT_CONTROLS + "px",
+              position: "relative",
+              bgcolor: "section.main",
               display: "flex",
-              justifyContent: "space-between"
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "center"
             }}
           >
-            <Stack spacing={5} direction="row">
-              <Stack spacing={1} direction="row">
-                <Typography sx={{ paddingTop: "10px" }}>View Type</Typography>
-                <FormControl
-                  size="small"
-                  sx={{
-                    minWidth: SELECT_WIDTH + "px",
-                    maxWidth: SELECT_WIDTH + "px"
-                  }}
-                >
-                  <Select
-                    displayEmpty
-                    value={viewType}
-                    onChange={changeViewType}
-                    renderValue={(selected: any) => {
-                      if (selected.length === 0) {
-                        return (
-                          <div style={{ color: "grey" }}>
-                            <em>Please Select</em>
-                          </div>
-                        );
-                      }
-                      return selected;
+            <div style={{ margin: "24px 64px 24px 24px" }}>
+              <Stack spacing={5} direction="row">
+                <Stack spacing={1} direction="row">
+                  <Typography sx={{ paddingTop: "10px" }}>View Type</Typography>
+                  <FormControl
+                    size="small"
+                    sx={{
+                      minWidth: SELECT_WIDTH + "px",
+                      maxWidth: SELECT_WIDTH + "px"
                     }}
                   >
-                    {viewTypes.map((viewType, index) => (
-                      <MenuItem key={index} value={viewType}>
-                        {viewType}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Stack>
-              {viewType === "" ? (
-                <Fab
-                  disabled
-                  onClick={() => {
-                    setRun(true);
-                  }}
-                >
-                  <PlayArrowIcon />
-                </Fab>
-              ) : viewType === "Position Data" ? (
-                run === false ? (
+                    <Select
+                      displayEmpty
+                      value={viewType}
+                      onChange={changeViewType}
+                      renderValue={(selected: any) => {
+                        if (selected.length === 0) {
+                          return (
+                            <div style={{ color: "grey" }}>
+                              <em>Please Select</em>
+                            </div>
+                          );
+                        }
+                        return selected;
+                      }}
+                    >
+                      {viewTypes.map((viewType, index) => (
+                        <MenuItem key={index} value={viewType}>
+                          {viewType}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Stack>
+                {viewType === "" ? (
                   <Fab
+                    disabled
                     onClick={() => {
                       setRun(true);
                     }}
                   >
                     <PlayArrowIcon />
                   </Fab>
+                ) : viewType === "Position Data" ? (
+                  run === false ? (
+                    <Fab
+                      onClick={() => {
+                        setRun(true);
+                      }}
+                    >
+                      <PlayArrowIcon />
+                    </Fab>
+                  ) : (
+                    <Fab
+                      onClick={() => {
+                        setRun(false);
+                      }}
+                    >
+                      <StopIcon />
+                    </Fab>
+                  )
                 ) : (
                   <Fab
                     onClick={() => {
-                      setRun(false);
+                      triggerClearPlot();
                     }}
                   >
-                    <StopIcon />
+                    <RestartAltIcon />
                   </Fab>
-                )
-              ) : (
-                <Fab
-                  onClick={() => {
-                    triggerClearPlot();
-                  }}
-                >
-                  <RestartAltIcon />
-                </Fab>
-              )}
-            </Stack>
-            <Stack spacing={1}>
-              <Stack spacing={1} direction="row">
-                <Typography sx={{ paddingTop: "10px" }}>
-                  Plot Rotation
-                </Typography>
-                <ToggleButtonGroup
-                  value={angle}
-                  exclusive
-                  onChange={handleAngleToggle}
-                  sx={{ height: "40px" }}
-                >
-                  {generateToggleButtons()}
-                </ToggleButtonGroup>
+                )}
               </Stack>
-              <Stack spacing={1} direction="row">
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      id="xFlip"
-                      onChange={(event) => handleFlipCheckboxClick(event)}
-                    />
-                  }
-                  label="X-Axis Flip"
-                />
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      id="yFlip"
-                      onChange={(event) => handleFlipCheckboxClick(event)}
-                    />
-                  }
-                  label="Y-Axis Flip"
-                />
+            </div>
+            <div style={{ margin: "24px 24px 24px 64px" }}>
+              <Stack spacing={1}>
+                <Stack spacing={1} direction="row">
+                  <Typography sx={{ paddingTop: "10px" }}>
+                    Plot Rotation
+                  </Typography>
+                  <ToggleButtonGroup
+                    value={angle}
+                    exclusive
+                    onChange={handleAngleToggle}
+                    sx={{ height: "40px" }}
+                  >
+                    {generateToggleButtons()}
+                  </ToggleButtonGroup>
+                </Stack>
+                <Stack spacing={1} direction="row">
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        id="xFlip"
+                        onChange={(event) => handleFlipCheckboxClick(event)}
+                      />
+                    }
+                    label="X-Axis Flip"
+                  />
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        id="yFlip"
+                        onChange={(event) => handleFlipCheckboxClick(event)}
+                      />
+                    }
+                    label="Y-Axis Flip"
+                  />
+                </Stack>
               </Stack>
-            </Stack>
-          </div>
+            </div>
+          </Box>
         </Stack>
       ) : null}
     </>

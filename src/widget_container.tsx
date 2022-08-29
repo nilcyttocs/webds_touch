@@ -10,7 +10,7 @@ import { ThemeProvider } from "@mui/material/styles";
 
 import { WebDSService } from "@webds/service";
 
-import { TouchMui } from "./widget_mui";
+import { Landing } from "./widget_landing";
 
 import { requestAPI } from "./handler";
 
@@ -65,7 +65,7 @@ const TouchContainer = (props: any): JSX.Element => {
     <div className="jp-webds-widget-body">
       <ThemeProvider theme={webdsTheme}>
         {initialized ? (
-          <TouchMui maxX={dimensions[0]} maxY={dimensions[1]} />
+          <Landing maxX={dimensions[0]} maxY={dimensions[1]} />
         ) : (
           <>
             <div
