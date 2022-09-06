@@ -16,8 +16,8 @@ import { requestAPI } from "./handler";
 
 let alertMessage = "";
 
-const alertMessagePrivateConfig =
-  "Failed to retrieve private config JSON file. Please check in file browser in left sidebar and ensure availability of private config JSON file in /Packrat/ directory (e.g. /Packrat/1234567/config_private.json for PR1234567).";
+const alertMessageConfigJSON =
+  "Failed to retrieve config JSON file. Please check in file browser in left sidebar and ensure availability of config JSON file in /Packrat/ directory (e.g. /Packrat/1234567/config.json for PR1234567).";
 
 const alertMessageAppInfo = "Failed to read application info from device.";
 
@@ -31,7 +31,7 @@ const TouchContainer = (props: any): JSX.Element => {
       await props.service.packrat.cache.addPrivateConfig();
     } catch (error) {
       console.error(error);
-      alertMessage = alertMessagePrivateConfig;
+      alertMessage = alertMessageConfigJSON;
       setAlert(true);
       return;
     }
