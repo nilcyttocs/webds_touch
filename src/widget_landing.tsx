@@ -41,7 +41,7 @@ const TABLE_SPACE = 2;
 const TABLE_WIDTH = 160;
 const TABLE_HEIGHT = 240;
 
-const INPUT_WIDTH = 800;
+const INPUT_WIDTH = 750;
 const SELECT_WIDTH = 200;
 
 const showHelp = false;
@@ -424,7 +424,6 @@ export const Landing = (props: any): JSX.Element => {
                         clearPlot={clearPlot}
                         plotWidth={lengths.plotXLength}
                         plotHeight={lengths.plotYLength}
-                        inputWidth={INPUT_WIDTH}
                         resetViewType={resetViewType}
                         updateShowPlot={updateShowPlot}
                         updateStats={updateStats}
@@ -454,6 +453,8 @@ export const Landing = (props: any): JSX.Element => {
             sx={{
               width: lengths.totalWidth + "px",
               minHeight: HEIGHT_CONTROLS + "px",
+              boxSizing: "border-box",
+              padding: "24px",
               position: "relative",
               bgcolor: "section.main",
               display: "flex",
@@ -462,79 +463,82 @@ export const Landing = (props: any): JSX.Element => {
               justifyContent: "center"
             }}
           >
-            <div style={{ margin: "24px 64px 24px 24px" }}>
-              <Stack spacing={5} direction="row">
-                <Stack spacing={1} direction="row">
-                  <Typography sx={{ paddingTop: "10px" }}>View Type</Typography>
-                  <FormControl
-                    size="small"
-                    sx={{
-                      minWidth: SELECT_WIDTH + "px",
-                      maxWidth: SELECT_WIDTH + "px"
+            <div
+              style={{
+                width: INPUT_WIDTH + "px",
+                display: "flex",
+                justifyContent: "space-between"
+              }}
+            >
+              <Stack spacing={1} direction="row">
+                <Typography sx={{ paddingTop: "10px" }}>View Type</Typography>
+                <FormControl
+                  size="small"
+                  sx={{
+                    minWidth: SELECT_WIDTH + "px",
+                    maxWidth: SELECT_WIDTH + "px"
+                  }}
+                >
+                  <Select
+                    displayEmpty
+                    value={viewType}
+                    onChange={changeViewType}
+                    renderValue={(selected: any) => {
+                      if (selected.length === 0) {
+                        return (
+                          <div style={{ color: "grey" }}>
+                            <em>Please Select</em>
+                          </div>
+                        );
+                      }
+                      return selected;
                     }}
                   >
-                    <Select
-                      displayEmpty
-                      value={viewType}
-                      onChange={changeViewType}
-                      renderValue={(selected: any) => {
-                        if (selected.length === 0) {
-                          return (
-                            <div style={{ color: "grey" }}>
-                              <em>Please Select</em>
-                            </div>
-                          );
-                        }
-                        return selected;
-                      }}
-                    >
-                      {viewTypes.map((viewType, index) => (
-                        <MenuItem key={index} value={viewType}>
-                          {viewType}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </Stack>
-                {viewType === "" ? (
+                    {viewTypes.map((viewType, index) => (
+                      <MenuItem key={index} value={viewType}>
+                        {viewType}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Stack>
+
+              {viewType === "" ? (
+                <Fab
+                  disabled
+                  onClick={() => {
+                    setRun(true);
+                  }}
+                >
+                  <PlayArrowIcon />
+                </Fab>
+              ) : viewType === "Position Data" ? (
+                run === false ? (
                   <Fab
-                    disabled
                     onClick={() => {
                       setRun(true);
                     }}
                   >
                     <PlayArrowIcon />
                   </Fab>
-                ) : viewType === "Position Data" ? (
-                  run === false ? (
-                    <Fab
-                      onClick={() => {
-                        setRun(true);
-                      }}
-                    >
-                      <PlayArrowIcon />
-                    </Fab>
-                  ) : (
-                    <Fab
-                      onClick={() => {
-                        setRun(false);
-                      }}
-                    >
-                      <StopIcon />
-                    </Fab>
-                  )
                 ) : (
                   <Fab
                     onClick={() => {
-                      triggerClearPlot();
+                      setRun(false);
                     }}
                   >
-                    <RestartAltIcon />
+                    <StopIcon />
                   </Fab>
-                )}
-              </Stack>
-            </div>
-            <div style={{ margin: "24px 24px 24px 64px" }}>
+                )
+              ) : (
+                <Fab
+                  onClick={() => {
+                    triggerClearPlot();
+                  }}
+                >
+                  <RestartAltIcon />
+                </Fab>
+              )}
               <Stack spacing={1}>
                 <Stack spacing={1} direction="row">
                   <Typography sx={{ paddingTop: "10px" }}>
