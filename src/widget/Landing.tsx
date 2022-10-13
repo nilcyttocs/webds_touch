@@ -27,7 +27,7 @@ import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 
-import TouchPlot from "./touch_component";
+import LivePlot from "./LivePlot";
 
 type Lengths = {
   [length: string]: number;
@@ -416,7 +416,7 @@ export const Landing = (props: any): JSX.Element => {
                         height: lengths.plotYLength
                       }}
                     >
-                      <TouchPlot
+                      <LivePlot
                         run={run}
                         maxX={props.maxX}
                         maxY={props.maxY}
@@ -581,3 +581,5 @@ export const Landing = (props: any): JSX.Element => {
     </>
   );
 };
+
+export default Landing;

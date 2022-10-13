@@ -12,7 +12,7 @@ import { WebDSService, WebDSWidget } from "@webds/service";
 
 import { touchIcon } from "./icons";
 
-import { TouchWidget } from "./widget_container";
+import TouchWidget from "./widget/TouchWidget";
 
 namespace Attributes {
   export const command = "webds_touch:open";

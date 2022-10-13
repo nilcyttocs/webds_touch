@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 
 import Plot from "react-plotly.js";
 
-import { requestAPI } from "./handler";
+import { requestAPI } from "../handler";
 
 const SSE_CLOSED = 2;
 
@@ -193,7 +193,7 @@ const setReport = async (
   return Promise.resolve();
 };
 
-const TouchPlot = (props: any): JSX.Element => {
+export const LivePlot = (props: any): JSX.Element => {
   const [showPlot, setShowPlot] = useState<boolean>(false);
   const [data, setData] = useState<any>([]);
   const [config, setConfig] = useState<any>({});
@@ -463,4 +463,4 @@ const TouchPlot = (props: any): JSX.Element => {
   );
 };
 
-export default TouchPlot;
+export default LivePlot;
