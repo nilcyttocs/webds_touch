@@ -258,7 +258,8 @@ export const LivePlot = (props: any): JSX.Element => {
         text: [i.toString()],
         textposition: "inside",
         textfont: { family: "Arial", color: "white", size: 18 },
-        name: "Object " + i
+        name: "Object " + i,
+        hovertemplate: "(%{x}, %{y})<extra></extra>"
       };
       if (i >= 5) {
         marker.textfont.color = "black";
@@ -278,7 +279,8 @@ export const LivePlot = (props: any): JSX.Element => {
         y: yTrace[i],
         mode: "lines",
         line: { shape: "linear", width: 5, color: viridisColors[i] },
-        name: "Object " + i
+        name: "Object " + i,
+        hovertemplate: "(%{x}, %{y})<extra></extra>"
       };
       traces.push(trace);
     }
