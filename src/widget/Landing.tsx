@@ -345,7 +345,7 @@ export const Landing = (props: any): JSX.Element => {
               width: lengths.totalWidth + "px",
               height: HEIGHT_TITLE + "px",
               position: "relative",
-              bgcolor: "section.main"
+              bgcolor: "section.background"
             }}
           >
             <Typography
@@ -369,12 +369,7 @@ export const Landing = (props: any): JSX.Element => {
                   transform: "translate(0%, -50%)"
                 }}
               >
-                <Typography
-                  variant="body2"
-                  sx={{ textDecoration: "underline" }}
-                >
-                  Help
-                </Typography>
+                <Typography variant="underline">Help</Typography>
               </Button>
             )}
           </Box>
@@ -383,7 +378,7 @@ export const Landing = (props: any): JSX.Element => {
               width: lengths.totalWidth + "px",
               height: HEIGHT_CONTENT + 24 * 2 + "px",
               position: "relative",
-              bgcolor: "section.main",
+              bgcolor: "section.background",
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
@@ -456,7 +451,7 @@ export const Landing = (props: any): JSX.Element => {
               boxSizing: "border-box",
               padding: "24px",
               position: "relative",
-              bgcolor: "section.main",
+              bgcolor: "section.background",
               display: "flex",
               flexDirection: "row",
               alignItems: "center",
