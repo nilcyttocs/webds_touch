@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 
-import Box from "@mui/material/Box";
 import Fab from "@mui/material/Fab";
 import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
-import Button from "@mui/material/Button";
 import Select from "@mui/material/Select";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
@@ -29,13 +27,15 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 
 import LivePlot from "./LivePlot";
 
+import { Canvas } from "./mui_extensions/Canvas";
+import { Content } from "./mui_extensions/Content";
+import { Controls } from "./mui_extensions/Controls";
+
 type Lengths = {
   [length: string]: number;
 };
 
-const HEIGHT_TITLE = 70;
-const HEIGHT_CONTENT = 500;
-const HEIGHT_CONTROLS = 120;
+const CONTENT_HEIGHT = 500;
 
 const TABLE_SPACE = 2;
 const TABLE_WIDTH = 160;
@@ -43,8 +43,6 @@ const TABLE_HEIGHT = 240;
 
 const INPUT_WIDTH = 750;
 const SELECT_WIDTH = 200;
-
-const showHelp = false;
 
 const viewTypes = ["Position Data", "Trace Data"];
 
@@ -315,11 +313,11 @@ export const Landing = (props: any): JSX.Element => {
   };
 
   useEffect(() => {
-    let height = HEIGHT_CONTENT;
-    let width = Math.floor((HEIGHT_CONTENT * props.maxX) / props.maxY);
+    let height = CONTENT_HEIGHT;
+    let width = Math.floor((CONTENT_HEIGHT * props.maxX) / props.maxY);
     if (width > height) {
-      width = HEIGHT_CONTENT;
-      height = Math.floor((HEIGHT_CONTENT * props.maxY) / props.maxX);
+      width = CONTENT_HEIGHT;
+      height = Math.floor((CONTENT_HEIGHT * props.maxY) / props.maxX);
     }
     let total = width;
     total += TABLE_WIDTH * 5;
@@ -339,46 +337,12 @@ export const Landing = (props: any): JSX.Element => {
   return (
     <>
       {initialized ? (
-        <Stack spacing={2}>
-          <Box
+        <Canvas
+          title={viewType === "" ? "Touch Data" : viewType}
+          width={lengths.totalWidth}
+        >
+          <Content
             sx={{
-              width: lengths.totalWidth + "px",
-              height: HEIGHT_TITLE + "px",
-              position: "relative",
-              bgcolor: "section.background"
-            }}
-          >
-            <Typography
-              variant="h5"
-              sx={{
-                position: "absolute",
-                top: "50%",
-                left: "50%",
-                transform: "translate(-50%, -50%)"
-              }}
-            >
-              {viewType === "" ? "Touch Data" : viewType}
-            </Typography>
-            {showHelp && (
-              <Button
-                variant="text"
-                sx={{
-                  position: "absolute",
-                  top: "50%",
-                  left: "16px",
-                  transform: "translate(0%, -50%)"
-                }}
-              >
-                <Typography variant="underline">Help</Typography>
-              </Button>
-            )}
-          </Box>
-          <Box
-            sx={{
-              width: lengths.totalWidth + "px",
-              height: HEIGHT_CONTENT + 24 * 2 + "px",
-              position: "relative",
-              bgcolor: "section.background",
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
@@ -443,15 +407,9 @@ export const Landing = (props: any): JSX.Element => {
                 Please select view type
               </Typography>
             )}
-          </Box>
-          <Box
+          </Content>
+          <Controls
             sx={{
-              width: lengths.totalWidth + "px",
-              minHeight: HEIGHT_CONTROLS + "px",
-              boxSizing: "border-box",
-              padding: "24px",
-              position: "relative",
-              bgcolor: "section.background",
               display: "flex",
               flexDirection: "row",
               alignItems: "center",
@@ -570,8 +528,8 @@ export const Landing = (props: any): JSX.Element => {
                 </Stack>
               </Stack>
             </div>
-          </Box>
-        </Stack>
+          </Controls>
+        </Canvas>
       ) : null}
     </>
   );
