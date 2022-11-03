@@ -27,6 +27,15 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 
 import LivePlot from "./LivePlot";
 
+import {
+  CONTENT_HEIGHT,
+  TABLE_WIDTH,
+  TABLE_HEIGHT,
+  TABLE_SPACING,
+  INPUT_WIDTH,
+  SELECT_WIDTH
+} from "./constants";
+
 import { Canvas } from "./mui_extensions/Canvas";
 import { Content } from "./mui_extensions/Content";
 import { Controls } from "./mui_extensions/Controls";
@@ -34,15 +43,6 @@ import { Controls } from "./mui_extensions/Controls";
 type Lengths = {
   [length: string]: number;
 };
-
-const CONTENT_HEIGHT = 500;
-
-const TABLE_SPACE = 2;
-const TABLE_WIDTH = 160;
-const TABLE_HEIGHT = 240;
-
-const INPUT_WIDTH = 750;
-const SELECT_WIDTH = 200;
 
 const viewTypes = ["Position Data", "Trace Data"];
 
@@ -96,7 +96,7 @@ export const Landing = (props: any): JSX.Element => {
             prev.plotXLength +
             TABLE_WIDTH * 5 +
             5 * 8 +
-            TABLE_SPACE * 4 * 8 +
+            TABLE_SPACING * 4 * 8 +
             24 * 2
         }));
         break;
@@ -111,7 +111,7 @@ export const Landing = (props: any): JSX.Element => {
             prev.plotYLength +
             TABLE_WIDTH * 5 +
             5 * 8 +
-            TABLE_SPACE * 4 * 8 +
+            TABLE_SPACING * 4 * 8 +
             24 * 2
         }));
         break;
@@ -126,7 +126,7 @@ export const Landing = (props: any): JSX.Element => {
             prev.plotXLength +
             TABLE_WIDTH * 5 +
             5 * 8 +
-            TABLE_SPACE * 4 * 8 +
+            TABLE_SPACING * 4 * 8 +
             24 * 2
         }));
         break;
@@ -141,7 +141,7 @@ export const Landing = (props: any): JSX.Element => {
             prev.plotYLength +
             TABLE_WIDTH * 5 +
             5 * 8 +
-            TABLE_SPACE * 4 * 8 +
+            TABLE_SPACING * 4 * 8 +
             24 * 2
         }));
         break;
@@ -292,7 +292,7 @@ export const Landing = (props: any): JSX.Element => {
     }
 
     return (
-      <Stack spacing={TABLE_SPACE} direction="row">
+      <Stack spacing={TABLE_SPACING} direction="row">
         {row}
       </Stack>
     );
@@ -306,7 +306,7 @@ export const Landing = (props: any): JSX.Element => {
     }
 
     return (
-      <Stack spacing={TABLE_SPACE} direction="row">
+      <Stack spacing={TABLE_SPACING} direction="row">
         {row}
       </Stack>
     );
@@ -322,7 +322,7 @@ export const Landing = (props: any): JSX.Element => {
     let total = width;
     total += TABLE_WIDTH * 5;
     total += 5 * 8;
-    total += TABLE_SPACE * 4 * 8;
+    total += TABLE_SPACING * 4 * 8;
     total += 24 * 2;
     setLengths({
       plotXLength: width,
@@ -390,7 +390,7 @@ export const Landing = (props: any): JSX.Element => {
                     </div>
                   </div>
                 </div>
-                <Stack spacing={TABLE_SPACE}>
+                <Stack spacing={TABLE_SPACING}>
                   {generateTopRow()}
                   {generateBottomRow()}
                 </Stack>
@@ -515,6 +515,11 @@ export const Landing = (props: any): JSX.Element => {
                       />
                     }
                     label="X-Axis Flip"
+                    sx={{
+                      "& .MuiTypography-root": {
+                        fontSize: "0.875rem"
+                      }
+                    }}
                   />
                   <FormControlLabel
                     control={
@@ -524,6 +529,11 @@ export const Landing = (props: any): JSX.Element => {
                       />
                     }
                     label="Y-Axis Flip"
+                    sx={{
+                      "& .MuiTypography-root": {
+                        fontSize: "0.875rem"
+                      }
+                    }}
                   />
                 </Stack>
               </Stack>
