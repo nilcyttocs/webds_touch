@@ -33,7 +33,9 @@ import {
   TABLE_HEIGHT,
   TABLE_SPACING,
   INPUT_WIDTH,
-  SELECT_WIDTH
+  SELECT_WIDTH,
+  VIRIDIS_COLORS,
+  LINEARITY_TOOLTIP
 } from "./constants";
 
 import { Canvas } from "./mui_extensions/Canvas";
@@ -51,21 +53,6 @@ const positionDataEntries = ["x", "y", "z", "wx", "wy"];
 const traceDataEntries = ["range x", "range y", "linearity"];
 
 const rotationAngles = [0, 90, 180, 270];
-
-const viridisColors = [
-  "#440154",
-  "#482878",
-  "#3E4A89",
-  "#31688E",
-  "#26828E",
-  "#1F9E89",
-  "#35B779",
-  "#6ECE58",
-  "#B5DE2B",
-  "#FDE725"
-];
-
-const linearityTooltip = "max error to line of best fit in x/y axis units";
 
 export const Landing = (props: any): JSX.Element => {
   const [initialized, setInitialized] = useState<boolean>(false);
@@ -221,7 +208,10 @@ export const Landing = (props: any): JSX.Element => {
                   <TableCell
                     colSpan={2}
                     align="center"
-                    sx={{ color: "black", backgroundColor: viridisColors[obj] }}
+                    sx={{
+                      color: "black",
+                      backgroundColor: VIRIDIS_COLORS[obj]
+                    }}
                   >
                     Finger {obj}
                   </TableCell>
@@ -229,7 +219,10 @@ export const Landing = (props: any): JSX.Element => {
                   <TableCell
                     colSpan={2}
                     align="center"
-                    sx={{ color: "white", backgroundColor: viridisColors[obj] }}
+                    sx={{
+                      color: "white",
+                      backgroundColor: VIRIDIS_COLORS[obj]
+                    }}
                   >
                     Finger {obj}
                   </TableCell>
@@ -251,7 +244,10 @@ export const Landing = (props: any): JSX.Element => {
                   <TableCell
                     colSpan={2}
                     align="center"
-                    sx={{ color: "black", backgroundColor: viridisColors[obj] }}
+                    sx={{
+                      color: "black",
+                      backgroundColor: VIRIDIS_COLORS[obj]
+                    }}
                   >
                     Finger {obj}
                   </TableCell>
@@ -259,7 +255,10 @@ export const Landing = (props: any): JSX.Element => {
                   <TableCell
                     colSpan={2}
                     align="center"
-                    sx={{ color: "white", backgroundColor: viridisColors[obj] }}
+                    sx={{
+                      color: "white",
+                      backgroundColor: VIRIDIS_COLORS[obj]
+                    }}
                   >
                     Finger {obj}
                   </TableCell>
@@ -268,7 +267,7 @@ export const Landing = (props: any): JSX.Element => {
               {traceDataEntries.map((dataEntry, index) => (
                 <TableRow key={index}>
                   {dataEntry === "linearity" && stats[obj][index] ? (
-                    <Tooltip title={linearityTooltip}>
+                    <Tooltip title={LINEARITY_TOOLTIP}>
                       <TableCell>{dataEntry}</TableCell>
                     </Tooltip>
                   ) : (

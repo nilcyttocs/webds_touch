@@ -8,22 +8,25 @@ import { ThemeProvider } from "@mui/material/styles";
 
 import Landing from "./Landing";
 
+import {
+  ALERT_MESSAGE_APP_INFO,
+  ALERT_MESSAGE_ADD_PUBLIC_CONFIG_JSON,
+  ALERT_MESSAGE_ADD_PRIVATE_CONFIG_JSON
+} from "./constants";
+
 import { requestAPI } from "../handler";
 
 let alertMessage = "";
-
-const alertMessagePublicConfigJSON =
-  "Failed to retrieve config JSON file. Please check in file browser in left sidebar and ensure availability of config JSON file in /Packrat/ directory (e.g. /Packrat/1234567/config.json for PR1234567).";
-
-const alertMessagePrivateConfigJSON =
-  "Failed to retrieve config JSON file. Please check in file browser in left sidebar and ensure availability of config JSON file in /Packrat/ directory (e.g. /Packrat/1234567/config_private.json for PR1234567).";
-
-const alertMessageAppInfo = "Failed to read application info from device.";
 
 export const TouchComponent = (props: any): JSX.Element => {
   const [initialized, setInitialized] = useState<boolean>(false);
   const [alert, setAlert] = useState<boolean>(false);
   const [dimensions, setDimensions] = useState<any>([]);
+
+  const showAlert = (message: string) => {
+    alertMessage = message;
+    setAlert(true);
+  };
 
   const initialize = async () => {
     const external = props.service.pinormos.isExternal();
@@ -36,11 +39,10 @@ export const TouchComponent = (props: any): JSX.Element => {
     } catch (error) {
       console.error(error);
       if (external) {
-        alertMessage = alertMessagePublicConfigJSON;
+        showAlert(ALERT_MESSAGE_ADD_PUBLIC_CONFIG_JSON);
       } else {
-        alertMessage = alertMessagePrivateConfigJSON;
+        showAlert(ALERT_MESSAGE_ADD_PRIVATE_CONFIG_JSON);
       }
-      setAlert(true);
       return;
     }
     const dataToSend: any = {
@@ -56,8 +58,7 @@ export const TouchComponent = (props: any): JSX.Element => {
       }
     } catch (error) {
       console.error(`Error - POST /webds/command\n${dataToSend}\n${error}`);
-      alertMessage = alertMessageAppInfo;
-      setAlert(true);
+      showAlert(ALERT_MESSAGE_APP_INFO);
       return;
     }
     setInitialized(true);
