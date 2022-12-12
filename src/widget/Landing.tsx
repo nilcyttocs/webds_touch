@@ -233,6 +233,35 @@ export const Landing = (props: any): JSX.Element => {
         }}
       >
         <div style={{ display: "flex", gap: "16px" }}>
+          <IconButton
+            color="primary"
+            disabled={!viewType}
+            onClick={() => {
+              if (viewType === "Position Data") {
+                setRun(!run);
+              } else {
+                setClearPlot(!clearPlot);
+              }
+            }}
+            sx={{
+              width: "40px",
+              height: "40px",
+              padding: "0px",
+              "& .MuiSvgIcon-root": {
+                fontSize: "2.5rem"
+              }
+            }}
+          >
+            {viewType === "Position Data" ? (
+              run ? (
+                <StopCircleIcon />
+              ) : (
+                <PlayCircleIcon />
+              )
+            ) : (
+              <ChangeCircleIcon />
+            )}
+          </IconButton>
           <TraceViewToggle
             value="traceView"
             selected={viewType === "Trace Data"}
@@ -267,35 +296,6 @@ export const Landing = (props: any): JSX.Element => {
               });
             }}
           />
-          <IconButton
-            color="primary"
-            disabled={!viewType}
-            onClick={() => {
-              if (viewType === "Position Data") {
-                setRun(!run);
-              } else {
-                setClearPlot(!clearPlot);
-              }
-            }}
-            sx={{
-              width: "40px",
-              height: "40px",
-              padding: "0px",
-              "& .MuiSvgIcon-root": {
-                fontSize: "2.5rem"
-              }
-            }}
-          >
-            {viewType === "Position Data" ? (
-              run ? (
-                <StopCircleIcon />
-              ) : (
-                <PlayCircleIcon />
-              )
-            ) : (
-              <ChangeCircleIcon />
-            )}
-          </IconButton>
         </div>
       </Controls>
     </Canvas>
