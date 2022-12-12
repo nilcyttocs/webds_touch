@@ -21,7 +21,7 @@ let alertMessage = "";
 export const TouchComponent = (props: any): JSX.Element => {
   const [initialized, setInitialized] = useState<boolean>(false);
   const [alert, setAlert] = useState<boolean>(false);
-  const [dimensions, setDimensions] = useState<any>([]);
+  const [appInfo, setAppInfo] = useState<any>();
 
   const showAlert = (message: string) => {
     alertMessage = message;
@@ -53,9 +53,7 @@ export const TouchComponent = (props: any): JSX.Element => {
         body: JSON.stringify(dataToSend),
         method: "POST"
       });
-      if (response.maxX && response.maxY) {
-        setDimensions([response.maxX, response.maxY]);
-      }
+      setAppInfo(response);
     } catch (error) {
       console.error(`Error - POST /webds/command\n${dataToSend}\n${error}`);
       showAlert(ALERT_MESSAGE_APP_INFO);
@@ -83,7 +81,7 @@ export const TouchComponent = (props: any): JSX.Element => {
               {alertMessage}
             </Alert>
           )}
-          {initialized && <Landing maxX={dimensions[0]} maxY={dimensions[1]} />}
+          {initialized && <Landing appInfo={appInfo} />}
         </div>
         {!initialized && (
           <div

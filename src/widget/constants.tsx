@@ -7,13 +7,15 @@ export const ALERT_MESSAGE_ADD_PUBLIC_CONFIG_JSON =
 export const ALERT_MESSAGE_ADD_PRIVATE_CONFIG_JSON =
   "Failed to retrieve config JSON file. Please check in file browser in left sidebar and ensure availability of config JSON file in /Packrat/ directory (e.g. /Packrat/1234567/config_private.json for PR1234567).";
 
-export const CONTENT_HEIGHT = 500;
+export const MIN_WIDTH = 1000;
 
 export const TABLE_WIDTH = 160;
 
 export const TABLE_HEIGHT = 240;
 
 export const TABLE_SPACING = 2;
+
+export const PLOT_HEIGHT = TABLE_HEIGHT * 2 + TABLE_SPACING * 8;
 
 export const INPUT_WIDTH = 750;
 
