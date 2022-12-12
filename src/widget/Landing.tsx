@@ -58,6 +58,7 @@ const convertReportType = (viewType: string) => {
 };
 
 export const Landing = (props: any): JSX.Element => {
+  const [plotReady, setPlotReady] = useState<boolean>(false);
   const [run, setRun] = useState<boolean>(true);
   const [flip, setFlip] = useState<Flip>({ h: false, v: false });
   const [viewType, setViewType] = useState<string>("Position Data");
@@ -212,11 +213,14 @@ export const Landing = (props: any): JSX.Element => {
               run={run}
               clearPlot={clearPlot}
               updateStats={updateStats}
+              setPlotReady={setPlotReady}
             />
-            <Stack spacing={TABLE_SPACING}>
-              {generateTopRow()}
-              {generateBottomRow()}
-            </Stack>
+            {plotReady && (
+              <Stack spacing={TABLE_SPACING}>
+                {generateTopRow()}
+                {generateBottomRow()}
+              </Stack>
+            )}
           </div>
         )}
       </Content>
@@ -231,7 +235,7 @@ export const Landing = (props: any): JSX.Element => {
         <div style={{ display: "flex", gap: "16px" }}>
           <TraceViewToggle
             value="traceView"
-            selected={viewType === "Trace View"}
+            selected={viewType === "Trace Data"}
             disabled={!viewType}
             onChange={() => {
               setViewType((prev) =>
