@@ -12,7 +12,7 @@ import TableContainer from "@mui/material/TableContainer";
 
 import IconButton from "@mui/material/IconButton";
 import PlayCircleIcon from "@mui/icons-material/PlayCircle";
-import StopCircleIcon from "@mui/icons-material/StopCircle";
+import PauseCircleIcon from "@mui/icons-material/PauseCircle";
 import ChangeCircleIcon from "@mui/icons-material/ChangeCircle";
 
 import TouchLive from "./touch_plots/TouchLive";
@@ -254,7 +254,7 @@ export const Landing = (props: any): JSX.Element => {
           >
             {viewType === "Position Data" ? (
               run ? (
-                <StopCircleIcon />
+                <PauseCircleIcon />
               ) : (
                 <PlayCircleIcon />
               )
