@@ -31,11 +31,7 @@ import { Canvas } from "./mui_extensions/Canvas";
 import { Content } from "./mui_extensions/Content";
 import { Controls } from "./mui_extensions/Controls";
 
-import {
-  HFlipToggle,
-  VFlipToggle,
-  TraceViewToggle
-} from "./mui_extensions/Button";
+import { FlipToggle, TouchViewToggle } from "./mui_extensions/Button";
 
 type Flip = {
   h: boolean;
@@ -262,21 +258,20 @@ export const Landing = (props: any): JSX.Element => {
               <ChangeCircleIcon />
             )}
           </IconButton>
-          <TraceViewToggle
-            value="traceView"
-            selected={viewType === "Trace Data"}
+          <TouchViewToggle
+            traceView={viewType === "Trace Data"}
             disabled={!viewType}
-            onChange={() => {
+            onClick={() => {
               setViewType((prev) =>
                 prev === "Position Data" ? "Trace Data" : "Position Data"
               );
             }}
           />
-          <VFlipToggle
-            value="vFlip"
-            selected={flip.v}
+          <FlipToggle
+            horizontal={false}
+            flip={flip.v}
             disabled={!viewType}
-            onChange={() => {
+            onClick={() => {
               setFlip((prev) => {
                 const updated = { ...prev };
                 updated.v = !updated.v;
@@ -284,11 +279,11 @@ export const Landing = (props: any): JSX.Element => {
               });
             }}
           />
-          <HFlipToggle
-            value="hFlip"
-            selected={flip.h}
+          <FlipToggle
+            horizontal={true}
+            flip={flip.h}
             disabled={!viewType}
-            onChange={() => {
+            onClick={() => {
               setFlip((prev) => {
                 const updated = { ...prev };
                 updated.h = !updated.h;
