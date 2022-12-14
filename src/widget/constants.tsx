@@ -17,10 +17,6 @@ export const TABLE_SPACING = 2;
 
 export const PLOT_HEIGHT = TABLE_HEIGHT * 2 + TABLE_SPACING * 8;
 
-export const INPUT_WIDTH = 750;
-
-export const SELECT_WIDTH = 200;
-
 export const VIRIDIS_COLORS = [
   "#440154",
   "#482878",
