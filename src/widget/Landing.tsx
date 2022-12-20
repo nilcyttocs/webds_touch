@@ -10,11 +10,6 @@ import TableCell from "@mui/material/TableCell";
 import TableBody from "@mui/material/TableBody";
 import TableContainer from "@mui/material/TableContainer";
 
-import IconButton from "@mui/material/IconButton";
-import PlayCircleIcon from "@mui/icons-material/PlayCircle";
-import PauseCircleIcon from "@mui/icons-material/PauseCircle";
-import ChangeCircleIcon from "@mui/icons-material/ChangeCircle";
-
 import TouchLive from "./touch_plots/TouchLive";
 
 import {
@@ -31,7 +26,12 @@ import { Canvas } from "./mui_extensions/Canvas";
 import { Content } from "./mui_extensions/Content";
 import { Controls } from "./mui_extensions/Controls";
 
-import { FlipToggle, TouchViewToggle } from "./mui_extensions/Button";
+import {
+  FlipToggle,
+  PauseRunToggle,
+  ResetButton,
+  TouchViewToggle
+} from "./mui_extensions/Button";
 
 type Flip = {
   h: boolean;
@@ -229,35 +229,23 @@ export const Landing = (props: any): JSX.Element => {
         }}
       >
         <div style={{ display: "flex", gap: "16px" }}>
-          <IconButton
-            color="primary"
-            disabled={!viewType}
-            onClick={() => {
-              if (viewType === "Position Data") {
+          {viewType === "Position Data" ? (
+            <PauseRunToggle
+              running={run}
+              disabled={!viewType}
+              onClick={() => {
                 setRun(!run);
-              } else {
+              }}
+            />
+          ) : (
+            <ResetButton
+              tooltip="Clear Traces"
+              disabled={!viewType}
+              onClick={() => {
                 setClearPlot(!clearPlot);
-              }
-            }}
-            sx={{
-              width: "40px",
-              height: "40px",
-              padding: "0px",
-              "& .MuiSvgIcon-root": {
-                fontSize: "2.5rem"
-              }
-            }}
-          >
-            {viewType === "Position Data" ? (
-              run ? (
-                <PauseCircleIcon />
-              ) : (
-                <PlayCircleIcon />
-              )
-            ) : (
-              <ChangeCircleIcon />
-            )}
-          </IconButton>
+              }}
+            />
+          )}
           <TouchViewToggle
             traceView={viewType === "Trace Data"}
             disabled={!viewType}

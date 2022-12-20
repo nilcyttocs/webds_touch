@@ -31,4 +31,4 @@ export const VIRIDIS_COLORS = [
 ];
 
 export const LINEARITY_TOOLTIP =
-  "max error to line of best fit in x/y axis units";
+  "Max error to line of best fit in x/y axis units";
