@@ -6,6 +6,8 @@ import { WebDSService } from "@webds/service";
 
 import TouchComponent from "./TouchComponent";
 
+export let webdsService: WebDSService;
+
 export class TouchWidget extends ReactWidget {
   id: string;
   service: WebDSService;
@@ -17,9 +19,10 @@ export class TouchWidget extends ReactWidget {
   }
 
   render(): JSX.Element {
+    webdsService = this.service;
     return (
       <div id={this.id + "_component"}>
-        <TouchComponent service={this.service} />
+        <TouchComponent />
       </div>
     );
   }

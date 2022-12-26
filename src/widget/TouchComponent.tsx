@@ -8,6 +8,8 @@ import { ThemeProvider } from "@mui/material/styles";
 
 import Landing from "./Landing";
 
+import { webdsService } from "./local_exports";
+
 import {
   ALERT_MESSAGE_APP_INFO,
   ALERT_MESSAGE_ADD_PUBLIC_CONFIG_JSON,
@@ -23,18 +25,20 @@ export const TouchComponent = (props: any): JSX.Element => {
   const [alert, setAlert] = useState<boolean>(false);
   const [appInfo, setAppInfo] = useState<any>();
 
+  const webdsTheme = webdsService.ui.getWebDSTheme();
+
   const showAlert = (message: string) => {
     alertMessage = message;
     setAlert(true);
   };
 
   const initialize = async () => {
-    const external = props.service.pinormos.isExternal();
+    const external = webdsService.pinormos.isExternal();
     try {
       if (external) {
-        await props.service.packrat.cache.addPublicConfig();
+        await webdsService.packrat.cache.addPublicConfig();
       } else {
-        await props.service.packrat.cache.addPrivateConfig();
+        await webdsService.packrat.cache.addPrivateConfig();
       }
     } catch (error) {
       console.error(error);
@@ -65,8 +69,6 @@ export const TouchComponent = (props: any): JSX.Element => {
   useEffect(() => {
     initialize();
   }, []);
-
-  const webdsTheme = props.service.ui.getWebDSTheme();
 
   return (
     <>
