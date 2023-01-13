@@ -1,53 +1,49 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
-import Paper from "@mui/material/Paper";
-import Stack from "@mui/material/Stack";
-import Tooltip from "@mui/material/Tooltip";
-
-import Table from "@mui/material/Table";
-import TableRow from "@mui/material/TableRow";
-import TableCell from "@mui/material/TableCell";
-import TableBody from "@mui/material/TableBody";
-import TableContainer from "@mui/material/TableContainer";
-
-import TouchLive from "./touch_plots/TouchLive";
+import Paper from '@mui/material/Paper';
+import Stack from '@mui/material/Stack';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableRow from '@mui/material/TableRow';
+import Tooltip from '@mui/material/Tooltip';
 
 import {
+  LINEARITY_TOOLTIP,
   MIN_WIDTH,
   PLOT_HEIGHT,
-  TABLE_WIDTH,
   TABLE_HEIGHT,
   TABLE_SPACING,
-  VIRIDIS_COLORS,
-  LINEARITY_TOOLTIP
-} from "./constants";
-
-import { Canvas } from "./mui_extensions/Canvas";
-import { Content } from "./mui_extensions/Content";
-import { Controls } from "./mui_extensions/Controls";
-
+  TABLE_WIDTH,
+  VIRIDIS_COLORS
+} from './constants';
 import {
   FlipToggle,
   PauseRunToggle,
   ResetButton,
   TouchViewToggle
-} from "./mui_extensions/Button";
+} from './mui_extensions/Button';
+import { Canvas } from './mui_extensions/Canvas';
+import { Content } from './mui_extensions/Content';
+import { Controls } from './mui_extensions/Controls';
+import TouchLive from './touch_plots/TouchLive';
 
 type Flip = {
   h: boolean;
   v: boolean;
 };
 
-const positionDataEntries = ["x", "y", "z", "wx", "wy"];
+const positionDataEntries = ['x', 'y', 'z', 'wx', 'wy'];
 
-const traceDataEntries = ["range x", "range y", "linearity"];
+const traceDataEntries = ['range x', 'range y', 'linearity'];
 
 const convertReportType = (viewType: string) => {
   switch (viewType) {
-    case "Position Data":
-      return "position";
-    case "Trace Data":
-      return "trace";
+    case 'Position Data':
+      return 'position';
+    case 'Trace Data':
+      return 'trace';
     default:
       return undefined;
   }
@@ -57,10 +53,10 @@ export const Landing = (props: any): JSX.Element => {
   const [plotReady, setPlotReady] = useState<boolean>(false);
   const [run, setRun] = useState<boolean>(true);
   const [flip, setFlip] = useState<Flip>({ h: false, v: false });
-  const [viewType, setViewType] = useState<string>("Position Data");
+  const [viewType, setViewType] = useState<string>('Position Data');
   const [clearPlot, setClearPlot] = useState<boolean>(false);
   const [stats, setStats] = useState<number[][]>(
-    [...Array(10)].map((e) => Array(5))
+    [...Array(10)].map(e => Array(5))
   );
 
   const updateStats = (stats: number[][]) => {
@@ -72,10 +68,10 @@ export const Landing = (props: any): JSX.Element => {
       <TableContainer
         key={obj}
         component={Paper}
-        sx={{ width: TABLE_WIDTH + "px", height: TABLE_HEIGHT + "px" }}
+        sx={{ width: TABLE_WIDTH + 'px', height: TABLE_HEIGHT + 'px' }}
       >
-        {viewType === "Position Data" ? (
-          <Table size="small" sx={{ width: TABLE_WIDTH + "px" }}>
+        {viewType === 'Position Data' ? (
+          <Table size="small" sx={{ width: TABLE_WIDTH + 'px' }}>
             <TableBody>
               <TableRow>
                 {obj >= 5 ? (
@@ -83,7 +79,7 @@ export const Landing = (props: any): JSX.Element => {
                     colSpan={2}
                     align="center"
                     sx={{
-                      color: "black",
+                      color: 'black',
                       backgroundColor: VIRIDIS_COLORS[obj]
                     }}
                   >
@@ -94,7 +90,7 @@ export const Landing = (props: any): JSX.Element => {
                     colSpan={2}
                     align="center"
                     sx={{
-                      color: "white",
+                      color: 'white',
                       backgroundColor: VIRIDIS_COLORS[obj]
                     }}
                   >
@@ -111,7 +107,7 @@ export const Landing = (props: any): JSX.Element => {
             </TableBody>
           </Table>
         ) : (
-          <Table size="small" sx={{ width: TABLE_WIDTH + "px" }}>
+          <Table size="small" sx={{ width: TABLE_WIDTH + 'px' }}>
             <TableBody>
               <TableRow>
                 {obj >= 5 ? (
@@ -119,7 +115,7 @@ export const Landing = (props: any): JSX.Element => {
                     colSpan={2}
                     align="center"
                     sx={{
-                      color: "black",
+                      color: 'black',
                       backgroundColor: VIRIDIS_COLORS[obj]
                     }}
                   >
@@ -130,7 +126,7 @@ export const Landing = (props: any): JSX.Element => {
                     colSpan={2}
                     align="center"
                     sx={{
-                      color: "white",
+                      color: 'white',
                       backgroundColor: VIRIDIS_COLORS[obj]
                     }}
                   >
@@ -140,7 +136,7 @@ export const Landing = (props: any): JSX.Element => {
               </TableRow>
               {traceDataEntries.map((dataEntry, index) => (
                 <TableRow key={index}>
-                  {dataEntry === "linearity" && stats[obj][index] ? (
+                  {dataEntry === 'linearity' && stats[obj][index] ? (
                     <Tooltip title={LINEARITY_TOOLTIP}>
                       <TableCell>{dataEntry}</TableCell>
                     </Tooltip>
@@ -187,19 +183,19 @@ export const Landing = (props: any): JSX.Element => {
 
   return (
     <Canvas
-      title={viewType === "" ? "Touch Data" : viewType}
+      title={viewType === '' ? 'Touch Data' : viewType}
       minWidth={MIN_WIDTH}
     >
       <Content
         sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center"
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center'
         }}
       >
-        {viewType !== "" && (
-          <div style={{ display: "flex", gap: "24px" }}>
+        {viewType !== '' && (
+          <div style={{ display: 'flex', gap: '24px' }}>
             <TouchLive
               length={PLOT_HEIGHT}
               portrait={true}
@@ -222,14 +218,14 @@ export const Landing = (props: any): JSX.Element => {
       </Content>
       <Controls
         sx={{
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "center"
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'center'
         }}
       >
-        <div style={{ display: "flex", gap: "16px" }}>
-          {viewType === "Position Data" ? (
+        <div style={{ display: 'flex', gap: '16px' }}>
+          {viewType === 'Position Data' ? (
             <PauseRunToggle
               running={run}
               disabled={!viewType}
@@ -247,11 +243,11 @@ export const Landing = (props: any): JSX.Element => {
             />
           )}
           <TouchViewToggle
-            traceView={viewType === "Trace Data"}
+            traceView={viewType === 'Trace Data'}
             disabled={!viewType}
             onClick={() => {
-              setViewType((prev) =>
-                prev === "Position Data" ? "Trace Data" : "Position Data"
+              setViewType(prev =>
+                prev === 'Position Data' ? 'Trace Data' : 'Position Data'
               );
             }}
           />
@@ -260,7 +256,7 @@ export const Landing = (props: any): JSX.Element => {
             flip={flip.v}
             disabled={!viewType}
             onClick={() => {
-              setFlip((prev) => {
+              setFlip(prev => {
                 const updated = { ...prev };
                 updated.v = !updated.v;
                 return updated;
@@ -272,7 +268,7 @@ export const Landing = (props: any): JSX.Element => {
             flip={flip.h}
             disabled={!viewType}
             onClick={() => {
-              setFlip((prev) => {
+              setFlip(prev => {
                 const updated = { ...prev };
                 updated.h = !updated.h;
                 return updated;

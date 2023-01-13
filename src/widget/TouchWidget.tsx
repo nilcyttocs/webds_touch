@@ -1,8 +1,8 @@
-import React from "react";
+import React from 'react';
 
-import { ReactWidget } from "@jupyterlab/apputils";
+import { ReactWidget } from '@jupyterlab/apputils';
 
-import TouchComponent from "./TouchComponent";
+import TouchComponent from './TouchComponent';
 
 export class TouchWidget extends ReactWidget {
   id: string;
@@ -14,7 +14,7 @@ export class TouchWidget extends ReactWidget {
 
   render(): JSX.Element {
     return (
-      <div id={this.id + "_component"}>
+      <div id={this.id + '_component'}>
         <TouchComponent />
       </div>
     );
