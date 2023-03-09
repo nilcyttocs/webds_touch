@@ -15,7 +15,7 @@ namespace Attributes {
   export const id = 'webds_touch_widget';
   export const label = 'Touch Data';
   export const caption = 'Touch Data';
-  export const category = 'Touch - Assessment';
+  export const category = 'Device - Assessment';
   export const rank = 20;
 }
 
