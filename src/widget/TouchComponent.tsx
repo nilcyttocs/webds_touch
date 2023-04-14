@@ -12,19 +12,12 @@ import {
 import Landing from './Landing';
 import { requestAPI, webdsService } from './local_exports';
 
-let alertMessage = '';
-
 export const TouchComponent = (props: any): JSX.Element => {
   const [initialized, setInitialized] = useState<boolean>(false);
-  const [alert, setAlert] = useState<boolean>(false);
+  const [alert, setAlert] = useState<string | undefined>(undefined);
   const [appInfo, setAppInfo] = useState<any>();
 
   const webdsTheme = webdsService.ui.getWebDSTheme();
-
-  const showAlert = (message: string) => {
-    alertMessage = message;
-    setAlert(true);
-  };
 
   const initialize = async () => {
     const external = webdsService.pinormos.isExternal();
@@ -37,9 +30,9 @@ export const TouchComponent = (props: any): JSX.Element => {
     } catch (error) {
       console.error(error);
       if (external) {
-        showAlert(ALERT_MESSAGE_ADD_PUBLIC_CONFIG_JSON);
+        setAlert(ALERT_MESSAGE_ADD_PUBLIC_CONFIG_JSON);
       } else {
-        showAlert(ALERT_MESSAGE_ADD_PRIVATE_CONFIG_JSON);
+        setAlert(ALERT_MESSAGE_ADD_PRIVATE_CONFIG_JSON);
       }
       return;
     }
@@ -54,7 +47,7 @@ export const TouchComponent = (props: any): JSX.Element => {
       setAppInfo(response);
     } catch (error) {
       console.error(`Error - POST /webds/command\n${dataToSend}\n${error}`);
-      showAlert(ALERT_MESSAGE_APP_INFO);
+      setAlert(ALERT_MESSAGE_APP_INFO);
       return;
     }
     setInitialized(true);
@@ -68,16 +61,16 @@ export const TouchComponent = (props: any): JSX.Element => {
     <>
       <ThemeProvider theme={webdsTheme}>
         <div className="jp-webds-widget-body">
-          {alert && (
+          {alert !== undefined && (
             <Alert
               severity="error"
-              onClose={() => setAlert(false)}
+              onClose={() => setAlert(undefined)}
               sx={{ whiteSpace: 'pre-wrap' }}
             >
-              {alertMessage}
+              {alert}
             </Alert>
           )}
-          {initialized && <Landing appInfo={appInfo} />}
+          {initialized && <Landing setAlert={setAlert} appInfo={appInfo} />}
         </div>
         {!initialized && (
           <div
